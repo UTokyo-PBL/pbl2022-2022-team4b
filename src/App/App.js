@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import SignIn from '../component/SignIn/SignIn';
-import SignUp from '../component/SignUp/SignUp.js';
-import HomePage from '../component/HomePage/HomePage';
+import SignIn from '../Components/SignIn/SignIn';
+import SignUp from '../Components/SignUp/SignUp.js';
+import HomePage from '../Components/HomePage/HomePage';
 import {Routes,Route,useNavigate} from "react-router-dom";
 
 import axios from 'axios'
