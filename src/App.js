@@ -1,27 +1,26 @@
-
-import React, { Component } from 'react'
+import React, { Component, useState, setState } from 'react'
 import Sidebar from "./Components/Sidebar"
 import Calendar from "./Components/Calendar"
 import Box from '@mui/material/Box';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useRoutes } from 'react-router-dom';
+import routes from './routes'
 
 function App() {
 
+  const routeTable = useRoutes(routes)
 
-
-  [state, setState] = useState({ calendarNames: ["calendar1", "calendar2"], scheules: {} })
-
-
-  const { calendarNames, scheules } = state
+  
 
   return (
 
     <div className="App">
       <Box sx={{ display: 'flex' }}>
 
-        <Sidebar calendarNames={calendarNames} />
+        {/* <Sidebar calendarNames={calendarNames} />
 
-        <Calendar scheules={scheules} />
+        <Calendar scheules={scheules} /> */}
+
+        {routeTable}
 
 
       </Box>

@@ -38,6 +38,7 @@ function Sidebar(props) {
     // state = { drawerOpen: false }
 
     const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [calendarNames, setCalendarNames] = React.useState([]);
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -48,6 +49,12 @@ function Sidebar(props) {
 
         PubSub.publish('drawerOpen', drawerOpen)
     };
+
+    React.useEffect(() => {
+        PubSub.subscribe('calendarNames', (_, data) => {
+            setCalendarNames(data)
+        })
+    }, [])
 
 
 
@@ -61,8 +68,6 @@ function Sidebar(props) {
 
 
     const drawerWidth = 240
-
-    const { calendarNames } = props
 
     return (
         <>

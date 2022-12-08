@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,9 +12,22 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { Routes, Route, useNavigate } from "react-router-dom";
+import PubSub from 'pubsub-js'
 import axios from 'axios'
 axios.defaults.baseURL = "http://localhost:8080";
+
+
+
+
+
+
+
+
+
+
+
+
 
 function Copyright(props) {
   return (
@@ -32,6 +45,37 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn(props) {
+
+  const navigate = useNavigate();
+  const [state, setState] = React.useState({ calendarNames: ["calendar1", "calendar2"], scheules: {} })
+  const { calendarNames, scheules } = state
+
+  const Login = (data) => {
+    axios.post('api/authorization', {
+      email: data.get('email'),
+      password: data.get('password'),
+    }).then(
+      res => {
+        navigate('/main', {
+          state: res.data['Authorization']
+        });
+      }).catch(
+        err => {
+          console.log('Fail api/authorization');
+          //假装能登录成功，开启服务器后把下面代码移动到res=>{}里去
+          PubSub.publish('calendarNames', calendarNames)
+          PubSub.publish('scheules', scheules)
+          navigate('/main', {
+            state: 'fake authorization'
+          });
+
+        });
+  };
+
+
+
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -39,7 +83,7 @@ export default function SignIn(props) {
       email: data.get('email'),
       password: data.get('password'),
     });
-    props.Login(data);
+    Login(data);
   };
 
   return (
