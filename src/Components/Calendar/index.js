@@ -63,13 +63,11 @@ function Calendar(props) {
 
 
 
-    
+
 
     return (
 
         <Main open={drawerOpen}>
-
-
             <Toolbar />
             <Scheduler
                 locale={ja}
