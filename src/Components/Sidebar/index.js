@@ -18,6 +18,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Box from '@mui/material/Box';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PubSub from 'pubsub-js'
+import { render } from '@testing-library/react';
 
 
 
@@ -31,129 +32,133 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-export default class index extends Component {
+function Sidebar(props) {
 
 
-    state = { drawerOpen: false }
+    // state = { drawerOpen: false }
 
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-    toggleDrawer = (open) => (event) => {
+    const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
 
-        this.setState({ drawerOpen: open });
+        setDrawerOpen(open);
 
-        PubSub.publish('drawerOpen', { drawerOpen: open })
+        PubSub.publish('drawerOpen', drawerOpen)
     };
 
 
-    calendarSelected = (id) => {
+
+    const calendarSelected = (id) => {
 
     }
 
-    addNewCalendar = () => {
-        
+    const addNewCalendar = () => {
+
     }
 
 
-    render() {
-        console.log(this.props)
-        const { drawerOpen } = this.state
-        const { calendarNames } = this.props
-        return (
-            <>``
+    const drawerWidth = 240
 
-                <CssBaseline />
+    const { calendarNames } = props
 
-                <AppBar position="fixed" open={this.state['drawerOpen']}>
+    return (
+        <>
 
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={this.toggleDrawer(true)}
-                            edge="start"
-                            sx={{ mr: 2, ...(this.drawerOpen && { display: 'none' }) }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
+            <CssBaseline />
 
-                        <Typography variant="h6" noWrap component="div">
-                            Calendar
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
+            <AppBar position="fixed" open={drawerOpen}>
 
-                <Drawer
-                    sx={{
-                        width: this.drawerWidth,
-                        flexShrink: 0,
-                        '& .MuiDrawer-paper': {
-                            width: this.drawerWidth,
-                            boxSizing: 'border-box',
-                        },
-                    }}
-                    open={this.state['drawerOpen']}
-                    variant='persistent'
-                    anchor="left"
-                >
-                    <DrawerHeader>
-                        <IconButton onClick={this.toggleDrawer(false)}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </DrawerHeader>
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={toggleDrawer(true)}
+                        edge="start"
+                        sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
 
-                    <Divider />
-                    <List>
-                        {['1', '2', '3', '4'].map((text) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {calendarNames.map((text) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton onClick={this.calendarSelected}>
-                                    <ListItemIcon>
-                                        <CalendarMonthIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                    <Typography variant="h6" noWrap component="div">
+                        Calendar
+                    </Typography>
+                </Toolbar>
+            </AppBar>
 
+            <Drawer
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: drawerWidth,
+                        boxSizing: 'border-box',
+                    },
+                }}
+                open={drawerOpen}
+                variant='persistent'
+                anchor="left"
+            >
+                <DrawerHeader>
+                    <IconButton onClick={toggleDrawer(false)}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                </DrawerHeader>
 
-                    <List style={{ marginTop: `auto` }}>
-
-                        <ListItem disablePadding>
-                            <ListItemButton onClick={this.addNewCalendar}>
+                <Divider />
+                <List>
+                    {['1', '2', '3', '4'].map((text) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+                <Divider />
+                <List>
+                    {calendarNames.map((text) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton onClick={calendarSelected}>
                                 <ListItemIcon>
                                     <CalendarMonthIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={'Add new calendar'} />
+                                <ListItemText primary={text} />
                             </ListItemButton>
                         </ListItem>
-
-                    </List>
-
-
-
-                </Drawer>
+                    ))}
+                </List>
 
 
+                <List style={{ marginTop: `auto` }}>
+
+                    <ListItem disablePadding>
+                        <ListItemButton onClick={addNewCalendar}>
+                            <ListItemIcon>
+                                <CalendarMonthIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'Add new calendar'} />
+                        </ListItemButton>
+                    </ListItem>
+
+                </List>
 
 
 
-            </>
-        )
-    }
+            </Drawer>
+
+
+
+
+
+        </>
+    )
+
 }
+
+export default Sidebar

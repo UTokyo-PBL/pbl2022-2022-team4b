@@ -6,6 +6,7 @@ import ja from 'date-fns/locale/ja'
 import Toolbar from '@mui/material/Toolbar';
 
 import PubSub from 'pubsub-js'
+import Sidebar from '../Sidebar';
 // import DrawerHeader from './Components/Sidebar/'
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -25,7 +26,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
                     easing: theme.transitions.easing.easeOut,
                     duration: theme.transitions.duration.enteringScreen,
                 }),
-                marginLeft: `${drawerWidth}px`,
+                marginLeft: `${-drawerWidth}px`,
             }),
         })
 
@@ -46,47 +47,47 @@ const drawerWidth = 240;
 // data = {calendarNames:["calendar1", "calendar2"], scheules:{}}
 
 
-export default class index extends Component {
+function Calendar(props) {
 
-    state = { drawerOpen: false }
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-    componentDidMount(){
-        PubSub.subscribe('drawerOpen', (_, data)=>{
-            this.setState(data)
+
+
+    React.useEffect(() => {
+        PubSub.subscribe('drawerOpen', (_, data) => {
+            setDrawerOpen(data)
         })
-    }
+    }, [])
 
 
+    return (
 
-    render() {
-
-        const { drawerOpen } = this.state
-        return (
-
-            <Main open={drawerOpen}>
+        <Main open={drawerOpen}>
 
 
-                <Toolbar />
-                <Scheduler
-                    locale={ja}
-                    view="month"
-                    events={[
-                        {
-                            event_id: 1,
-                            title: "Event 1",
-                            start: new Date("2022/5/2 09:30"),
-                            end: new Date("2022/5/2 10:30"),
-                        },
-                        {
-                            event_id: 2,
-                            title: "Event 2",
-                            start: new Date("2022/5/4 10:00"),
-                            end: new Date("2022/5/4 11:00"),
-                        },
-                    ]}
-                />
+            <Toolbar />
+            <Scheduler
+                locale={ja}
+                view="month"
+                events={[
+                    {
+                        event_id: 1,
+                        title: "Event 1",
+                        start: new Date("2022/5/2 09:30"),
+                        end: new Date("2022/5/2 10:30"),
+                    },
+                    {
+                        event_id: 2,
+                        title: "Event 2",
+                        start: new Date("2022/5/4 10:00"),
+                        end: new Date("2022/5/4 11:00"),
+                    },
+                ]}
+            />
 
-            </Main>
-        )
-    }
+        </Main>
+    )
+
 }
+
+export default Calendar
