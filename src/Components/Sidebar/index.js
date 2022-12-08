@@ -19,6 +19,7 @@ import Box from '@mui/material/Box';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PubSub from 'pubsub-js'
 import { render } from '@testing-library/react';
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -38,7 +39,7 @@ function Sidebar(props) {
     // state = { drawerOpen: false }
 
     const [drawerOpen, setDrawerOpen] = React.useState(false);
-    const [calendarNames, setCalendarNames] = React.useState([]);
+    const {calendarNames} = props
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -49,13 +50,6 @@ function Sidebar(props) {
 
         PubSub.publish('drawerOpen', drawerOpen)
     };
-
-    React.useEffect(() => {
-        PubSub.subscribe('calendarNames', (_, data) => {
-            setCalendarNames(data)
-        })
-    }, [])
-
 
 
     const calendarSelected = (id) => {

@@ -7,6 +7,7 @@ import Toolbar from '@mui/material/Toolbar';
 
 import PubSub from 'pubsub-js'
 import Sidebar from '../Sidebar';
+import { useLocation } from 'react-router-dom';
 // import DrawerHeader from './Components/Sidebar/'
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -50,18 +51,19 @@ const drawerWidth = 240;
 function Calendar(props) {
 
     const [drawerOpen, setDrawerOpen] = React.useState(false);
-    const [scheules, setSchedules] = React.useState([]);
+    const [schedules, setSchedules] = React.useState([]);
 
 
     React.useEffect(() => {
         PubSub.subscribe('drawerOpen', (_, data) => {
             setDrawerOpen(data)
         })
-        PubSub.subscribe('scheules', (_, data) => {
-            setSchedules(data)
-        })
     }, [])
 
+
+
+
+    
 
     return (
 

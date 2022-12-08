@@ -2,8 +2,7 @@ import React from 'react';
 import { Navigate } from "react-router-dom";
 import SignIn from '../Components/SignIn'
 import SignUp from '../Components/SignUp'
-import Sidebar from "../Components/Sidebar"
-import Calendar from "../Components/Calendar"
+import HomePage from '../Components/HomePage';
 
 
 export default [
@@ -19,7 +18,7 @@ export default [
     {
 
         path: '/main',
-        element: <><Sidebar /><Calendar /></>
+        element: <HomePage/>
 
     },
     {

@@ -47,8 +47,7 @@ const theme = createTheme();
 export default function SignIn(props) {
 
   const navigate = useNavigate();
-  const [state, setState] = React.useState({ calendarNames: ["calendar1", "calendar2"], scheules: {} })
-  const { calendarNames, scheules } = state
+
 
   const Login = (data) => {
     axios.post('api/authorization', {
@@ -63,10 +62,11 @@ export default function SignIn(props) {
         err => {
           console.log('Fail api/authorization');
           //假装能登录成功，开启服务器后把下面代码移动到res=>{}里去
-          PubSub.publish('calendarNames', calendarNames)
-          PubSub.publish('scheules', scheules)
+
           navigate('/main', {
-            state: 'fake authorization'
+            state: {
+              token: 'fake authorization'
+            }
           });
 
         });
