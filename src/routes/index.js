@@ -16,10 +16,8 @@ export default [
         element: <SignUp />
     },
     {
-
         path: '/main',
-        element: <HomePage/>
-
+        element: <HomePage />
     },
     {
         path: '/',

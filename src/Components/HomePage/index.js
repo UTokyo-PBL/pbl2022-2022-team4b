@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../Sidebar';
 import Calendar from '../Calendar';
-
+import PopUp from '../PopUp'
 
 function HomePage(props) {
 
@@ -9,6 +9,7 @@ function HomePage(props) {
 
     const [userInfo, setUserInfo] = React.useState({ calendarNames: ["calendar1", "calendar2"], scheules: {} })
 
+ 
     React.useEffect(() => {
         //用axios向服务器发送token获取用户信息
         //setUserInfo
@@ -20,6 +21,7 @@ function HomePage(props) {
         <>
             <Sidebar calendarNames={calendarNames}/>
             <Calendar scheules = {scheules}/>
+            <PopUp/>
         </>
     );
 };

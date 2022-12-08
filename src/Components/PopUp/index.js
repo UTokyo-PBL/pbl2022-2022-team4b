@@ -1,16 +1,19 @@
 import React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
+import PubSub from 'pubsub-js'
 
-const Index = () => {
+function PopUp(props) {
 
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
 
-    const handleClose = () => { }
+    const handleClose = () => { 
+        setOpen(false)
+    }
 
     React.useEffect(() => {
         PubSub.subscribe('dialogOpen', (_, data) => {
-            setDrawerOpen(data)
+            setOpen(data)
         })
     }, [])
 
@@ -18,11 +21,11 @@ const Index = () => {
     return (
         <>
             <Dialog onClose={handleClose} open={open}>
-                <DialogTitle>Set backup account</DialogTitle>
+                <DialogTitle>New calendar name: </DialogTitle>
 
             </Dialog>
         </>
     );
 }
 
-export default Index;
+export default PopUp;

@@ -57,7 +57,7 @@ function Sidebar(props) {
     }
 
     const addNewCalendar = () => {
-
+        PubSub.publish('dialogOpen', true)
     }
 
 
