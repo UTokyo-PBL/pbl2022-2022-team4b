@@ -58,7 +58,7 @@ All the APIs are defined in the `views.py`, following the standard Django struct
 To use the API, please follow this blog post:
 http://v1k45.com/blog/modern-django-part-4-adding-authentication-to-react-spa-using-drf/
 
-Generally to say, after login, you need to add such a header for authentication: `Authentication: Token [Your Token]`, in which the token is received in login response. 
+Generally to say, after login, you need to add such a header for authorization: `authorization: Token [Your Token]`, in which the token is received in login response. 
 
 When testing, I also found it's necessary to add this header: `X-CSRFToken: [Token]`, in which the token is received from the response.
 
@@ -69,7 +69,7 @@ const postRequestConf = {
     withCredentials: true,
     headers: {
         'X-CSRFToken': Cookies.get('csrftoken'),
-        'Authentication': 'Token XXXXXX'
+        'authorization': 'Token XXXXXX'
     }
 }
 ```

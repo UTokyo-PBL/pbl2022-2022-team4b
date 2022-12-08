@@ -1,3 +1,4 @@
 db.sqlite3
-accounts/migrations/
-scheduler/migrations/
+*/migrations/
+*/__pycache__/
+test.sh
