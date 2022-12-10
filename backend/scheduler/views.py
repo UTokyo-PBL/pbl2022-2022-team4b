@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from datetime import datetime
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 
 from .serializers import CalendarSerializer, TaskSerializer
 from .models import Calendar, Task
@@ -31,9 +31,9 @@ class TaskAPI(viewsets.ModelViewSet):
     def get_queryset(self):
         calendar_id = self.request.GET.get('calendar')
         if self.request.GET.keys() >= {'start', 'end'}:
-            start_time = datetime.fromtimestamp(self.request.GET.get('start'))
-            end_time = datetime.fromtimestamp(self.request.GET.get('end'))
-            tasks = Task.objects.filter(calendar__id=calendar_id, start_time__range=(start_time,end_time))
+            start_time = datetime.fromisoformat(self.request.GET.get('start'))
+            end_time = datetime.fromisoformat(self.request.GET.get('end'))
+            tasks = Task.objects.filter(calendar__id=calendar_id).filter(start_time__range=(start_time,end_time))
         else:
             tasks = Task.objects.filter(calendar__id=calendar_id)
         return tasks
