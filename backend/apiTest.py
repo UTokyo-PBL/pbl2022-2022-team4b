@@ -88,6 +88,32 @@ response = requests.get(f'http://localhost:8000/api/scheduler/calendars/{calenda
 print_resp(response)
 
 
+# Invite Code TEST
+
+print("\n### (GET)invite code ###\n")
+response = requests.get(f'http://localhost:8000/api/scheduler/invitecode/{calendar_id}/', headers=headers)
+print_resp(response)
+
+invite_code = response.json()['invite_code']
+members = response.json()['members']
+guests = response.json()['guests']
+guests.append('user2@test.com')  # Add one guest
+
+print("\n### (PUT)update members/guests ###\n")
+new_list = dict()
+new_list['invite_code'] = invite_code
+new_list['members'] = members
+new_list['guests'] = guests
+response = requests.put(f'http://localhost:8000/api/scheduler/invitecode/{calendar_id}/', headers=headers, data=new_list)
+print_resp(response)
+
+
+print("\n### (PUT)update invite code ###\n")
+new_list['invite_code'] = "new code"  # Reset the code as 'new code', informing the backend to create a new one
+response = requests.put(f'http://localhost:8000/api/scheduler/invitecode/{calendar_id}/', headers=headers, data=new_list)
+print_resp(response)
+
+
 # Task TEST
 
 new_task['calendar'] = calendar_id
@@ -143,3 +169,6 @@ print(f"status: {response.status_code}")
 print("\n### (DELETE)delete calendar ###\n")
 response = requests.delete(f'http://localhost:8000/api/scheduler/calendars/{calendar_id}/', headers=headers)
 print(f"status: {response.status_code}")
+
+
+

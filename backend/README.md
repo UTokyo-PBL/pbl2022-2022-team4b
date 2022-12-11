@@ -40,6 +40,12 @@ Emphrasize that if you found one API (i.e. /scheduler/calendars/1/) is not expli
 
 ### Developing Instructions
 
+**Superuser**
+
+> Username: admin  
+> Passwd: 123456  
+
+Login to `^/admin/` as superuser, to gain a fully access to the database. For more details, please refer to https://docs.djangoproject.com/en/4.1/ref/contrib/admin/ 
 
 **When updates the models.py in a certain app**
 
@@ -120,3 +126,5 @@ Combining viewset and router: https://www.django-rest-framework.org/tutorial/6-v
 
 
 ### API Table
+
+Please refer to the `apiTest.py` for all the API usage.

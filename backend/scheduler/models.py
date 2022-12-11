@@ -4,14 +4,14 @@ from django.contrib.auth.models import User
 import secrets
 import string
 
-def genShareCode():
+def gen_share_code():
     alphabet = string.ascii_letters + string.digits
     return ''.join(secrets.choice(alphabet) for i in range(10))
 
 class Calendar(models.Model):
     title = models.CharField(max_length=120)
     created_time = models.DateTimeField(auto_now_add=True)
-    invite_code = models.CharField(verbose_name="Invite Code", max_length=20, unique=True, default=genShareCode, blank=True)
+    invite_code = models.CharField(verbose_name="Invite Code", max_length=20, unique=True, default=gen_share_code, blank=True)
     description = models.TextField(default='', blank=True)
     owner = models.ForeignKey(User, related_name="calendars",
                               on_delete=models.CASCADE, blank=False)

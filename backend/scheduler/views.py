@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
 from datetime import datetime
-from rest_framework import viewsets, permissions, generics
+from rest_framework import viewsets, permissions, mixins
 
-from .serializers import CalendarSerializer, TaskSerializer
+from .serializers import CalendarSerializer, TaskSerializer, InviteCodeSerializer
 from .models import Calendar, Task
 
 # Create your views here.
@@ -37,3 +37,14 @@ class TaskAPI(viewsets.ModelViewSet):
         else:
             tasks = Task.objects.filter(calendar__id=calendar_id)
         return tasks
+
+
+class InviteCodeAPI(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = Calendar.objects.all()
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = InviteCodeSerializer
+
+    # def get_queryset(self):
+    #     calendar_id = self.request.GET.get('calendar')
+    #     shareCode = Calendar.objects.get(pk=calendar_id)
+    #     return [shareCode]
