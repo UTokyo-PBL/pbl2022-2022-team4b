@@ -31,6 +31,7 @@ def get_time_str(*args):
 
 
 login_data = {"username":"user1@test.com", "password": "cnmtest1"}
+register_data = {"username":"user1@test.com", "first_name":"user1", "password": "cnmtest1", "email": "user1@test.com"}
 new_calendar = {
     'owner': "user1@test.com",
     'title': "calendar111",  
@@ -47,6 +48,10 @@ new_task = {
 }
 
 # Account TEST
+
+print("\n### (POST)register ###\n")
+response = requests.post('http://localhost:8000/api/account/register/', data=register_data)
+print_resp(response)
 
 print("\n### (POST)login ###\n")
 response = requests.post('http://localhost:8000/api/account/login/', data=login_data)
@@ -171,4 +176,6 @@ response = requests.delete(f'http://localhost:8000/api/scheduler/calendars/{cale
 print(f"status: {response.status_code}")
 
 
-
+print("\n### (POST)logout ###\n")
+response = requests.post(f'http://localhost:8000/api/account/logout/', headers=headers)
+print(f"status: {response.status_code}")

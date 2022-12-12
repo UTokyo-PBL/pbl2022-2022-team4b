@@ -9,7 +9,7 @@ from knox.views import LoginView
 
 from django.contrib.auth import login
 
-from .serializers import CreateUserSerializer, UserProfileSerializer
+from .serializers import CreateUserSerializer, UserProfileSerializer, UserSerializer
 from .models import Profile
 
 # Create your views here.
@@ -23,8 +23,8 @@ class RegistrationAPI(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response({
-            "user": UserProfileSerializer(Profile.objects.get(user=user), context=self.get_serializer_context()).data,
-            # "token": AuthToken.objects.create(user)
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)
         })
 
 class LoginAPI(LoginView):
