@@ -151,6 +151,12 @@ response = requests.get(f'http://localhost:8000/api/scheduler/tasks/{task_id}/?{
 # GET /api/scheduler/tasks/51/?calendar=91
 print_resp(response)
 
+print("\n### (GET)task of all calendars ###\n")
+params = f"calendar=all"
+response = requests.get(f'http://localhost:8000/api/scheduler/tasks/?{params}', headers=headers)
+# GET /api/scheduler/tasks/?calendar=all
+print_resp(response)
+
 print("\n### (GET)updated task with time range ###\n")
 params = f"calendar={calendar_id}&start={get_time_str(2022,12,10)}&end={get_time_str(2022,12,11)}"
 response = requests.get(f'http://localhost:8000/api/scheduler/tasks/?{params}', headers=headers)

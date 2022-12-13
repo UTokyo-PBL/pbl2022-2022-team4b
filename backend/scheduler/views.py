@@ -5,6 +5,7 @@ from rest_framework import viewsets, permissions, mixins
 
 from .serializers import CalendarSerializer, TaskSerializer, InviteCodeSerializer
 from .models import Calendar, Task
+from .calendarTaskUtils import *
 
 # Create your views here.
 # Need to complete all the functions here to handle the requests
@@ -14,10 +15,7 @@ class CalendarAPI(viewsets.ModelViewSet):
     serializer_class = CalendarSerializer
 
     def get_queryset(self):
-        calendars = self.request.user.calendars.all()
-        member_calendars = self.request.user.member_calendars.all()
-        guest_calendars = self.request.user.guest_calendars.all()
-        return calendars | member_calendars | guest_calendars
+        return get_all_calendars(self.request.user)
 
     # def perform_create(self, serializer):
     #     serializer.save(owner=self.request.user)
@@ -30,13 +28,14 @@ class TaskAPI(viewsets.ModelViewSet):
 
     def get_queryset(self):
         calendar_id = self.request.GET.get('calendar')
-        if self.request.GET.keys() >= {'start', 'end'}:
-            start_time = datetime.fromisoformat(self.request.GET.get('start'))
-            end_time = datetime.fromisoformat(self.request.GET.get('end'))
-            tasks = Task.objects.filter(calendar__id=calendar_id).filter(start_time__range=(start_time,end_time))
+        if calendar_id == 'all':
+            calendar_list = get_all_calendars(self.request.user)
         else:
-            tasks = Task.objects.filter(calendar__id=calendar_id)
-        return tasks
+            calendar_list = Calendar.objects.filter(id=calendar_id)
+        start_time = self.request.GET.get('start')
+        end_time = self.request.GET.get('end')
+        return get_tasks(calendar_list, start_time, end_time)
+
 
 
 class InviteCodeAPI(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
