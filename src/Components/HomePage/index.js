@@ -7,77 +7,79 @@ import axios from 'axios'
 import Cookies from 'js-cookie';
 axios.defaults.baseURL = "http://localhost:8080";
 
+// A little bug,view在里面又问题
+var view = 'all';
 function HomePage(props) {
     const token = useLocation()['state']
     const headers = {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'authorization': 'Token ' + token,
     };
-    const [calendars, setCalendars] = useState();
-    const [view, setView] = useState('all');
-    const [events,setEvents] = useState([
-        {
-            event_id: 1,
-            title: "Event 1",
-            start: new Date("2022/12/2 09:30"),
-            end: new Date("2022/12/2 10:30"),
+    const [calendars, setCalendars] = useState([]);
+    const [events,setEvents] = useState([]);
+    const getCalendarsAsync = async ()=>{
+        try{
+            const res = await axios.get('api/scheduler/calendars/',{headers:headers});
+            await setCalendars(res.data);
         }
-    ]);
-    const [eventsTest,setEventsTest] = useState([
-        {
-            event_id: 1,
-            title: "Event 1",
-            start: new Date("2022/12/2 09:30"),
-            end: new Date("2022/12/2 10:30"),
-        }
-    ]);
-
-    const newEvent = {
-        'title': "task111",
-        'description': "test task 111",
-        'calendar': 0,
-        'start_time': '2022-12-10 11:30:00+00:00',
-        'end_time': '2022-12-10 13:30:00+00:00',
+        catch(err){{
+            console.log('Failed  api/scheduler/calendars/'); 
+        }};
     }
-    // axios.get('api/scheduler/calendars/tasks/?calendar=' + view,{headers:headers})
-    //     .then(res =>(
-    //         setEventsTest(res.data);
-    //         console.log(res.data);).
-    //     catch(err){{
-    //         console.log('Failed api/scheduler/calendars/'); 
-    //     }};
-    // }
+    const getEventsAsync = async (id)=>{
+        try{
+            const res = await axios.get('api/scheduler/tasks/?calendar=' + id,{headers:headers});
+            await setEvents(res.data);
+        }
+        catch(err){{
+            console.log('Failed api/scheduler/tasks/?calendar='); 
+        }};
+    } 
+    const mySetView= async (id) => {
+        view = id;
+        await getEventsAsync(id);
+    }
 
     React.useEffect(() => {
-        const getCalendarsAsync = async ()=>{
-            try{
-                const res = await axios.get('api/scheduler/calendars/',{headers:headers})
-                await setCalendars(res.data);
-            }
-            catch(err){{
-                console.log('Failed  api/scheduler/calendars/'); 
-            }};
-        }
-        const getEventsAsync = async ()=>{
-            try{
-                const res = await axios.get('api/scheduler/calendars/tasks/?calendar=' + view,{headers:headers})
-                setEventsTest(res.data);
-                console.log(res.data);
-            }
-            catch(err){{
-                console.log('Failed api/scheduler/calendars/'); 
-            }};
-        }
         getCalendarsAsync();
-        getEventsAsync();
     }, [])
+
+    const addTask = (event)=>{
+        axios.post('api/scheduler/tasks/',{
+            'title': event['title'],
+            'description': '',
+            'calendar': view,
+            'start_time': event['start'],
+            'end_time': event['end']
+            },
+            {headers:headers})
+            .then(res =>{
+                getEventsAsync(view);
+            }).
+            catch(err =>{
+                console.log('Failed api/scheduler/calendars/'); 
+            });
+            console.log('create')
+    }
+
+    const delTask = (id)=>{
+        const [taskId,calendarId] = id.split(' ')
+        axios.delete('api/scheduler/tasks/'+ taskId +'/?calendar=' + calendarId,
+            {headers:headers})
+            .then(res =>{
+                getEventsAsync(view);
+            }).
+            catch(err =>{
+                console.log('Failed api/scheduler/tasks/{task_id}/?calendar={calendar_id}'); 
+            });
+            console.log('create')
+    }
 
     return (
         <>
-            {/* <Sidebar calendars = {calendars}/> */}
-            <Sidebar calendars = {calendars}/>
-            <Calendar events = {events}/>
-            <PopUp/>
+            <Sidebar calendars = {calendars} mySetView={mySetView}/>
+            <Calendar events = {events} addTask = {addTask} delTask={delTask} />
+            <PopUp getCalendarsAsync = {getCalendarsAsync}/>
         </>
     );
 };

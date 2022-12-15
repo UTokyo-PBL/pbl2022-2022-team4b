@@ -38,6 +38,8 @@ function Sidebar(props) {
         PubSub.publish('drawerOpen', drawerOpen)
     };
     const calendarSelected = (id) => {
+        console.log(id)
+        props.mySetView(id);
     }
     const addNewCalendar = () => {
         PubSub.publish('dialogOpen', true)
@@ -85,7 +87,7 @@ function Sidebar(props) {
 
                 <Divider/>
                 <List>
-                    {['TEST'].map((text) => (
+                    {['Notes'].map((text) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>
@@ -98,10 +100,18 @@ function Sidebar(props) {
                 </List>
                 <Divider/>
                 <List>
+                    <ListItem disablePadding>
+                        <ListItemButton onClick={()=>calendarSelected('all')}>
+                            <ListItemIcon>
+                                <CalendarMonthIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'all'} />
+                        </ListItemButton>
+                    </ListItem>
                     {props.calendars && props.calendars.map((item) =>{
                         return (
                         <ListItem key={item['id']} disablePadding>
-                            <ListItemButton onClick={calendarSelected}>
+                            <ListItemButton onClick={()=>calendarSelected(item['id'])}>
                                 <ListItemIcon>
                                     <CalendarMonthIcon />
                                 </ListItemIcon>
@@ -110,9 +120,7 @@ function Sidebar(props) {
                         </ListItem>)
                     })}
                 </List>
-
                 <List style={{ marginTop: `auto` }}>
-
                     <ListItem disablePadding>
                         <ListItemButton onClick={addNewCalendar}>
                             <ListItemIcon>
@@ -125,7 +133,6 @@ function Sidebar(props) {
             </Drawer>
         </>
     )
-
 }
 
 export default Sidebar

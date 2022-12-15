@@ -22,7 +22,7 @@ function PopUp(props) {
         <>
             <Dialog onClose={handleClose} open={open}>
                 {/* <DialogTitle>New calendar name: </DialogTitle> */}
-                <AddNewCalendar></AddNewCalendar>
+                <AddNewCalendar getCalendarsAsync = {props.getCalendarsAsync}></AddNewCalendar>
             </Dialog>
         </>
     );

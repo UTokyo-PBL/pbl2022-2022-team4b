@@ -6,8 +6,8 @@ import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useLocation} from "react-router-dom";
 import Container from '@mui/material/Container';
-import Cookies from 'js-cookie';
 import PubSub from 'pubsub-js'
+import Cookies from 'js-cookie';
 import axios from 'axios'
 axios.defaults.baseURL = "http://localhost:8080";
 
@@ -18,7 +18,6 @@ const AddNewCalendar = (props) => {
     const headers = {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'authorization': 'Token ' + token,};
-
     axios.get('api/account/user/',{headers: headers})
     .then(res => {
         userInfo = res.data;
@@ -37,7 +36,8 @@ const AddNewCalendar = (props) => {
                 'guests': [data.get('Guests')]},
             {headers: headers},
         ).then(res => {
-            PubSub.publish('dialogOpen', true);
+            PubSub.publish('dialogOpen', false);
+            props.getCalendarsAsync();
         }).catch(err => {
             console.log('Fail api/scheduler/calendars/');
         });
