@@ -19,8 +19,6 @@ import Box from '@mui/material/Box';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PubSub from 'pubsub-js'
 
-
-
 export const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -30,130 +28,104 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-
-export default class index extends Component {
-
-
-    state = { drawerOpen: false }
-
-
-    toggleDrawer = (open) => (event) => {
+function Sidebar(props) {
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
-
-        this.setState({ drawerOpen: open });
-
-        PubSub.publish('drawerOpen', { drawerOpen: open })
+        setDrawerOpen(open);
+        PubSub.publish('drawerOpen', drawerOpen)
     };
-
-
-    calendarSelected = (id) => {
-
+    const calendarSelected = (id) => {
     }
-
-    addNewCalendar = () => {
-        
+    const addNewCalendar = () => {
+        PubSub.publish('dialogOpen', true)
     }
+    const drawerWidth = 240;
+    return (
+        <>
+            <CssBaseline />
+            <AppBar position="fixed" open={drawerOpen}>
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={toggleDrawer(true)}
+                        edge="start"
+                        sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
 
+                    <Typography variant="h6" noWrap component="div">
+                        Calendar
+                    </Typography>
+                </Toolbar>
+            </AppBar>
 
-    render() {
-        console.log(this.props)
-        const { drawerOpen } = this.state
-        const { calendarNames } = this.props
-        return (
-            <>``
+            <Drawer
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: drawerWidth,
+                        boxSizing: 'border-box',
+                    },
+                }}
+                open={drawerOpen}
+                variant='persistent'
+                anchor="left"
+            >
+                <DrawerHeader>
+                    <IconButton onClick={toggleDrawer(false)}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                </DrawerHeader>
 
-                <CssBaseline />
-
-                <AppBar position="fixed" open={this.state['drawerOpen']}>
-
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={this.toggleDrawer(true)}
-                            edge="start"
-                            sx={{ mr: 2, ...(this.drawerOpen && { display: 'none' }) }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-
-                        <Typography variant="h6" noWrap component="div">
-                            Calendar
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-
-                <Drawer
-                    sx={{
-                        width: this.drawerWidth,
-                        flexShrink: 0,
-                        '& .MuiDrawer-paper': {
-                            width: this.drawerWidth,
-                            boxSizing: 'border-box',
-                        },
-                    }}
-                    open={this.state['drawerOpen']}
-                    variant='persistent'
-                    anchor="left"
-                >
-                    <DrawerHeader>
-                        <IconButton onClick={this.toggleDrawer(false)}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </DrawerHeader>
-
-                    <Divider />
-                    <List>
-                        {['1', '2', '3', '4'].map((text) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {calendarNames.map((text) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton onClick={this.calendarSelected}>
-                                    <ListItemIcon>
-                                        <CalendarMonthIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-
-
-                    <List style={{ marginTop: `auto` }}>
-
-                        <ListItem disablePadding>
-                            <ListItemButton onClick={this.addNewCalendar}>
+                <Divider/>
+                <List>
+                    {['TEST'].map((text) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+                <Divider/>
+                <List>
+                    {props.calendars && props.calendars.map((item) =>{
+                        return (
+                        <ListItem key={item['id']} disablePadding>
+                            <ListItemButton onClick={calendarSelected}>
                                 <ListItemIcon>
                                     <CalendarMonthIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={'Add new calendar'} />
+                                <ListItemText primary={item['title']} />
                             </ListItemButton>
-                        </ListItem>
+                        </ListItem>)
+                    })}
+                </List>
 
-                    </List>
+                <List style={{ marginTop: `auto` }}>
 
+                    <ListItem disablePadding>
+                        <ListItemButton onClick={addNewCalendar}>
+                            <ListItemIcon>
+                                <CalendarMonthIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'Add new calendar'} />
+                        </ListItemButton>
+                    </ListItem>
+                </List>
+            </Drawer>
+        </>
+    )
 
-
-                </Drawer>
-
-
-
-
-
-            </>
-        )
-    }
 }
+
+export default Sidebar

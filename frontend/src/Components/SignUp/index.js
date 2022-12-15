@@ -12,13 +12,16 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {useNavigate} from "react-router-dom";
+import  axios from 'axios'
+axios.defaults.baseURL = "http://localhost:8080";
 
-function Copyright(props: any) {
+function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+      UTokyo Canlenda
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -29,12 +32,26 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
+      name: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
+    });
+
+    axios.post('api/account/register/',{
+      username: data.get('email'),
+      first_name: data.get('name'),
+      email: data.get('email'),
+      password: data.get('password'),
+      })
+      .then(res => {
+        navigate('/login');
+    }).catch(err => {
+      console.log('Fail api/createAccount'); 
     });
   };
 
@@ -58,25 +75,14 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id="name"
+                  label="Name"
+                  name="name"
+                  autoComplete="name"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -117,7 +123,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
