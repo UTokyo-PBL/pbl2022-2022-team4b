@@ -5,8 +5,10 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'calendars', views.CalendarAPI, 'calendar')
+router.register(r'tasks', views.TaskAPI, 'task')
+router.register(r'invitecode', views.InviteCodeAPI, 'invitecode')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('calendar', include(router.urls)),
+    path('', include(router.urls)),
 ]

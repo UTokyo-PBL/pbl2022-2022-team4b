@@ -9,7 +9,8 @@ from knox.views import LoginView
 
 from django.contrib.auth import login
 
-from .serializers import CreateUserSerializer, UserSerializer
+from .serializers import CreateUserSerializer, UserProfileSerializer, UserSerializer
+from .models import Profile
 
 # Create your views here.
 
@@ -38,7 +39,7 @@ class LoginAPI(LoginView):
 
 class UserAPI(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
-    serializer_class = UserSerializer
+    serializer_class = UserProfileSerializer
 
     def get_object(self):
-        return self.request.user
+        return Profile.objects.get(user=self.request.user)
