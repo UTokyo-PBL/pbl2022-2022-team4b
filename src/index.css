@@ -1,0 +1,4 @@
+/* 
+# add this part for CORS
+CORS_ALLOW_HEADERS = ('content-disposition', 'accept-encoding','authentication',
+                      'content-type', 'accept', 'origin', 'authorization','access-control-allow-origin') */

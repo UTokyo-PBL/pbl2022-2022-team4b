@@ -17,18 +17,6 @@ import PubSub from 'pubsub-js'
 import axios from 'axios'
 axios.defaults.baseURL = "http://localhost:8080";
 
-
-
-
-
-
-
-
-
-
-
-
-
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -42,38 +30,25 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
 
 export default function SignIn(props) {
-
+  const theme = createTheme();
   const navigate = useNavigate();
 
-
-  const Login = (data) => {
-    axios.post('api/authorization', {
-      email: data.get('email'),
-      password: data.get('password'),
+  const Login = (formData) => {
+    axios.post('api/account/login/', {
+      username: formData.get('email'),
+      password: formData.get('password'),
     }).then(
       res => {
         navigate('/main', {
-          state: res.data['Authorization']
+          state: res.data['token']
         });
       }).catch(
         err => {
-          console.log('Fail api/authorization');
-          //假装能登录成功，开启服务器后把下面代码移动到res=>{}里去
-
-          navigate('/main', {
-            state: {
-              token: 'fake authorization'
-            }
-          });
-
+          console.log('Fail api/account/login/');
         });
   };
-
-
-
 
 
   const handleSubmit = (event) => {

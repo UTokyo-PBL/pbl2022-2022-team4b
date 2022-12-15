@@ -2,7 +2,7 @@ import React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import PubSub from 'pubsub-js'
-
+import AddNewCalendar from '../AddNewCalendar/AddNewCalendar'
 function PopUp(props) {
 
     const [open, setOpen] = React.useState(false);
@@ -21,8 +21,8 @@ function PopUp(props) {
     return (
         <>
             <Dialog onClose={handleClose} open={open}>
-                <DialogTitle>New calendar name: </DialogTitle>
-
+                {/* <DialogTitle>New calendar name: </DialogTitle> */}
+                <AddNewCalendar></AddNewCalendar>
             </Dialog>
         </>
     );
