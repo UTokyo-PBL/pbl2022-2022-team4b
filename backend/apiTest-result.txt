@@ -1,0 +1,761 @@
+
+### (POST)register ###
+
+status: 400
+content: {
+  "username": [
+    "A user with that username already exists."
+  ]
+}
+
+### (POST)login ###
+
+status: 200
+content: {
+  "expiry": "2022-12-16T00:55:28.360875Z",
+  "token": "d8778b27c48f05ba54c0d75b3b1dbac3854a769d337d676e93e4fd41eee3f597"
+}
+
+### (GET)user info ###
+
+status: 200
+content: {
+  "name": "user1",
+  "email": "user1@test.com",
+  "user": {
+    "id": 5,
+    "username": "user1@test.com"
+  }
+}
+
+### (GET)calendar info ###
+
+status: 200
+content: [
+  {
+    "id": 100,
+    "title": "['calendar111']",
+    "created_time": "2022-12-10T18:10:13.930970Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": []
+  },
+  {
+    "id": 101,
+    "title": "['calendar111']",
+    "created_time": "2022-12-10T18:11:10.295197Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": []
+  },
+  {
+    "id": 118,
+    "title": "['calendar111']",
+    "created_time": "2022-12-13T11:40:37.555958Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 119,
+    "title": "['calendar111']",
+    "created_time": "2022-12-13T11:41:26.196997Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 120,
+    "title": "['calendar111']",
+    "created_time": "2022-12-13T11:50:49.240847Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 121,
+    "title": "['calendar111']",
+    "created_time": "2022-12-13T11:54:54.235067Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 129,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:22:28.146848Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 130,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:23:49.702495Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 132,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:29:33.325180Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 135,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:35:46.573024Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 137,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:37:19.638561Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 138,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:38:47.124423Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 139,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:39:08.287574Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 140,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:39:19.145928Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 142,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:40:31.171515Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 144,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:43:45.584964Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  }
+]
+
+### (POST)new calendar  ###
+
+status: 201
+content: {
+  "id": 149,
+  "title": [
+    "calendar111"
+  ],
+  "created_time": "2022-12-15T14:55:28.398888Z",
+  "description": [
+    "test calendar 111"
+  ],
+  "owner": "user1@test.com",
+  "members": [
+    "user2@test.com"
+  ],
+  "guests": []
+}
+
+### (GET)calendar info ###
+
+status: 200
+content: [
+  {
+    "id": 100,
+    "title": "['calendar111']",
+    "created_time": "2022-12-10T18:10:13.930970Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": []
+  },
+  {
+    "id": 101,
+    "title": "['calendar111']",
+    "created_time": "2022-12-10T18:11:10.295197Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": []
+  },
+  {
+    "id": 118,
+    "title": "['calendar111']",
+    "created_time": "2022-12-13T11:40:37.555958Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 119,
+    "title": "['calendar111']",
+    "created_time": "2022-12-13T11:41:26.196997Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 120,
+    "title": "['calendar111']",
+    "created_time": "2022-12-13T11:50:49.240847Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 121,
+    "title": "['calendar111']",
+    "created_time": "2022-12-13T11:54:54.235067Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 129,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:22:28.146848Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 130,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:23:49.702495Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 132,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:29:33.325180Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 135,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:35:46.573024Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 137,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:37:19.638561Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 138,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:38:47.124423Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 139,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:39:08.287574Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 140,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:39:19.145928Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 142,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:40:31.171515Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 144,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T13:43:45.584964Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user3@test.com"
+    ],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 149,
+    "title": "['calendar111']",
+    "created_time": "2022-12-15T14:55:28.398888Z",
+    "description": "['test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [
+      "user2@test.com"
+    ],
+    "guests": []
+  }
+]
+
+### (UPDATE)calendar update ###
+
+status: 200
+content: {
+  "id": 149,
+  "title": [
+    "calendar111"
+  ],
+  "created_time": "2022-12-15T14:55:28.398888Z",
+  "description": [
+    "updated test calendar 111"
+  ],
+  "owner": "user1@test.com",
+  "members": [
+    "user3@test.com"
+  ],
+  "guests": []
+}
+
+### (GET)updated calendar ###
+
+status: 200
+content: {
+  "id": 149,
+  "title": "['calendar111']",
+  "created_time": "2022-12-15T14:55:28.398888Z",
+  "description": "['updated test calendar 111']",
+  "owner": "user1@test.com",
+  "members": [
+    "user3@test.com"
+  ],
+  "guests": []
+}
+
+### (GET)invite code ###
+
+status: 200
+content: {
+  "id": 149,
+  "invite_code": "HecFvBa3GR",
+  "members": [
+    "user3@test.com"
+  ],
+  "guests": []
+}
+
+### (PUT)update members/guests ###
+
+status: 200
+content: {
+  "id": 149,
+  "invite_code": "HecFvBa3GR",
+  "members": [
+    "user3@test.com"
+  ],
+  "guests": [
+    "user2@test.com"
+  ]
+}
+
+### (PUT)update invite code ###
+
+status: 200
+content: {
+  "id": 149,
+  "invite_code": "MttDJJoETI",
+  "members": [
+    "user3@test.com"
+  ],
+  "guests": [
+    "user2@test.com"
+  ]
+}
+
+### (GET)task info ###
+
+status: 200
+content: []
+
+### (POST)new task  ###
+
+status: 201
+content: {
+  "id": 99,
+  "title": "task111",
+  "description": "test task 111",
+  "completed": false,
+  "calendar": 149,
+  "start_time": "2022-12-10T10:00:00Z",
+  "end_time": "2022-12-10T11:30:00Z"
+}
+
+### (POST)find slot  ###
+
+status: 200
+content: {
+  "best_start_time": "2022-12-10T14:00:00Z",
+  "total_conflict_time": "0.0",
+  "total_conflict_members": 0
+}
+
+### (UPDATE)task update ###
+
+status: 200
+content: {
+  "id": 99,
+  "title": "task111",
+  "description": "updated test task 111",
+  "completed": false,
+  "calendar": 149,
+  "start_time": "2022-12-10T10:00:00Z",
+  "end_time": "2022-12-10T16:00:00Z"
+}
+
+### (POST)find slot  ###
+
+status: 200
+content: {
+  "best_start_time": "2022-12-10T16:00:00Z",
+  "total_conflict_time": "0.0",
+  "total_conflict_members": 0
+}
+
+### (GET)task info ###
+
+status: 200
+content: {
+  "id": 99,
+  "title": "task111",
+  "description": "updated test task 111",
+  "completed": false,
+  "calendar": 149,
+  "start_time": "2022-12-10T10:00:00Z",
+  "end_time": "2022-12-10T16:00:00Z"
+}
+
+### (GET)task of all calendars ###
+
+status: 200
+content: [
+  {
+    "id": 71,
+    "title": "task111",
+    "description": "updated test task 111",
+    "completed": false,
+    "calendar": 121,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T14:00:00Z"
+  },
+  {
+    "id": 79,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 129,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 80,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 130,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 82,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 132,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 85,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 135,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 87,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 137,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 88,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 138,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 89,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 139,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 90,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 140,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 92,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 142,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 94,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 144,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 99,
+    "title": "task111",
+    "description": "updated test task 111",
+    "completed": false,
+    "calendar": 149,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T16:00:00Z"
+  }
+]
+
+### (GET)updated task with time range ###
+
+status: 200
+content: [
+  {
+    "id": 99,
+    "title": "task111",
+    "description": "updated test task 111",
+    "completed": false,
+    "calendar": 149,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T16:00:00Z"
+  }
+]
+
+### (GET)no task with wrong time range ###
+
+status: 200
+content: []
+
+### (DELETE)delete task ###
+
+status: 204
+
+### (DELETE)delete calendar ###
+
+status: 204
+
+### (POST)logout ###
+
+status: 204
