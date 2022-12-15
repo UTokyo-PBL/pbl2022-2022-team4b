@@ -46,6 +46,11 @@ new_task = {
     'start_time': get_time(2022,12,10,10,0),
     'end_time': get_time(2022,12,10,11,30),
 }
+find_slot = {
+    'start_time': get_time(2022,12,10).isoformat(),
+    'end_time': get_time(2022,12,11).isoformat(),
+    'duration': 180
+}
 
 # Account TEST
 
@@ -136,13 +141,23 @@ print_resp(response)
 
 task_id = response.json()['id']
 
+print("\n### (POST)find slot  ###\n")
+response = requests.post('http://localhost:8000/api/scheduler/findslot/', headers=headers, data=find_slot)
+# POST /api/scheduler/findslot/
+print_resp(response)
+
 print("\n### (UPDATE)task update ###\n")
 new_new_task = new_task.copy()
 new_new_task['description'] = 'updated test task 111'
-new_new_task['end_time'] = datetime.datetime(2022,12,10,14,0)
+new_new_task['end_time'] = datetime.datetime(2022,12,10,16,0)
 params = f"calendar={calendar_id}"
 response = requests.put(f"http://localhost:8000/api/scheduler/tasks/{task_id}/?{params}", headers=headers, data=new_new_task)
 # PUT /api/scheduler/tasks/51/?calendar=91
+print_resp(response)
+
+print("\n### (POST)find slot  ###\n")
+response = requests.post('http://localhost:8000/api/scheduler/findslot/', headers=headers, data=find_slot)
+# POST /api/scheduler/findslot/
 print_resp(response)
 
 print("\n### (GET)task info ###\n")
@@ -181,7 +196,8 @@ print("\n### (DELETE)delete calendar ###\n")
 response = requests.delete(f'http://localhost:8000/api/scheduler/calendars/{calendar_id}/', headers=headers)
 print(f"status: {response.status_code}")
 
-
 print("\n### (POST)logout ###\n")
 response = requests.post(f'http://localhost:8000/api/account/logout/', headers=headers)
 print(f"status: {response.status_code}")
+
+

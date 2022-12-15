@@ -11,4 +11,5 @@ router.register(r'invitecode', views.InviteCodeAPI, 'invitecode')
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('findslot/', views.FindSlotAPI.as_view(), name="findSlot")
 ]

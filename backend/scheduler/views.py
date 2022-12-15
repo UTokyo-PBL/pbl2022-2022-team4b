@@ -1,11 +1,14 @@
 from django.shortcuts import render
 
-from datetime import datetime
-from rest_framework import viewsets, permissions, mixins
+import datetime
+from rest_framework import viewsets, permissions, mixins, generics
 
 from .serializers import CalendarSerializer, TaskSerializer, InviteCodeSerializer
 from .models import Calendar, Task
-from .calendarTaskUtils import *
+from .calendarTaskUtils import get_tasks, get_all_calendars
+from rest_framework.response import Response
+
+from .find_free_slot import allocate_free_slot
 
 # Create your views here.
 # Need to complete all the functions here to handle the requests
@@ -27,14 +30,20 @@ class TaskAPI(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
 
     def get_queryset(self):
-        calendar_id = self.request.GET.get('calendar')
-        if calendar_id == 'all':
-            calendar_list = get_all_calendars(self.request.user)
-        else:
-            calendar_list = Calendar.objects.filter(id=calendar_id)
-        start_time = self.request.GET.get('start')
-        end_time = self.request.GET.get('end')
-        return get_tasks(calendar_list, start_time, end_time)
+        try:
+            calendar_id = self.request.GET.get('calendar')
+            if calendar_id == 'all':
+                calendar_list = get_all_calendars(self.request.user)
+            else:
+                calendar_list = Calendar.objects.filter(id=calendar_id)
+            start_time = self.request.GET.get('start')
+            end_time = self.request.GET.get('end')
+            return get_tasks(calendar_list, start_time, end_time)
+        except Exception as e:
+            return Response({
+                "Failed": e
+            })
+       
 
 
 
@@ -43,7 +52,30 @@ class InviteCodeAPI(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = InviteCodeSerializer
 
-    # def get_queryset(self):
-    #     calendar_id = self.request.GET.get('calendar')
-    #     shareCode = Calendar.objects.get(pk=calendar_id)
-    #     return [shareCode]
+class FindSlotAPI(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated, )
+    # serializer_class = CreateUserSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            req_dict:dict = request.data.dict()
+            print(req_dict['duration'])
+            duration = datetime.timedelta(minutes=int(req_dict['duration']))
+            start_time = datetime.datetime.fromisoformat(req_dict["start_time"])
+            end_time = datetime.datetime.fromisoformat(req_dict["end_time"])
+            calendar_list = get_all_calendars(self.request.user)
+            tasks = Task.objects.filter(calendar__in=calendar_list).filter(start_time__range=(start_time,end_time))
+            task_list = [(t.start_time, t.end_time) for t in tasks]
+            best_start_time, total_conflict_time, total_conflict_member = allocate_free_slot(duration, task_list, task_span=(start_time, end_time))
+            return Response({
+                "best_start_time": best_start_time,
+                "total_conflict_time": total_conflict_time,
+                "total_conflict_members": total_conflict_member
+            })
+        except BaseException as e:
+            return Response({
+                "Failed": str(e)
+            })
+        # return Response({
+        #     "Failed": 0
+        # })
