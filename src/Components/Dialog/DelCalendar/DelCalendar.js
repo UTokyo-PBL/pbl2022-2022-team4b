@@ -18,6 +18,7 @@ import Divider from '@mui/material/Divider';
 // import TextField from '@mui/material/TextField';
 import InboxIcon from '@mui/icons-material/Inbox';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import PersonIcon from '@mui/icons-material/Person';
 // import DraftsIcon from '@mui/icons-material/Drafts';
 
@@ -63,7 +64,6 @@ const DelCalendar = (props) => {
     };
 
     return (
-        // <Dialog onClose={handleClose} open={open}>
         <Dialog onClose={handleClose} open={open}>
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">
@@ -87,6 +87,18 @@ const DelCalendar = (props) => {
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <PersonIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
+                            </ListItem>)): <div>{'there is no member'}</div>}
+                    </List>
+                    <Divider />
+                    <List>
+                        {calendarInfo['guests'] ? calendarInfo['guests'].map((text) => (
+                            <ListItem key={text} disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <RemoveRedEyeIcon />
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>

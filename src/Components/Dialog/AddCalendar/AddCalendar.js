@@ -93,6 +93,16 @@ const AddCalendar = (props) => {
                             id="Members"
                             autoComplete="Members"
                         />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="Guests"
+                            label="Guests"
+                            type="Guests"
+                            id="Guests"
+                            autoComplete="Guests"
+                        />
                         <Button
                             startIcon={<AddIcon />}
                             type="submit"
