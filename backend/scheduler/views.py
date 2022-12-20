@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 import datetime
 from rest_framework import viewsets, permissions, mixins, generics
+from rest_framework.decorators import action
+from django.contrib.auth.models import User
 
 from .serializers import CalendarSerializer, TaskSerializer, InviteCodeSerializer
 from .models import Calendar, Task
@@ -51,6 +53,27 @@ class InviteCodeAPI(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets
     queryset = Calendar.objects.all()
     permission_classes = (permissions.IsAuthenticated, )
     serializer_class = InviteCodeSerializer
+
+    @action(detail=True, methods=['put'])
+    def add(self, request, pk=None):
+        try:
+            req_dict:dict = dict(request.data)
+            calendar = Calendar.objects.get(pk=pk)
+            if not calendar.invite_code == req_dict.get('invite_code')[0]:
+                return Response({
+                    "Failed": "Invite code wrong"
+                })
+            calendar.members.set(calendar.members.get_queryset() | User.objects.filter(username__in=req_dict.get('members', [])))
+            calendar.guests.set(calendar.guests.get_queryset() | User.objects.filter(username__in=req_dict.get('guests', [])))
+            calendar.save()
+            print(User.objects.filter(username__in=req_dict.get('guests', [])))
+            serializer = self.get_serializer(calendar)
+            return Response(serializer.data)
+        except BaseException as e:
+            return Response({
+                "Failed": str(e)
+            })
+
 
 class FindSlotAPI(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated, )

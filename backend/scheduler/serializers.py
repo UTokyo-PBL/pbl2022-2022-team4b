@@ -23,7 +23,7 @@ class InviteCodeSerializer(serializers.ModelSerializer):
         rep = {
             'invite_code': gen_share_code() if data_dict['invite_code'][0] == "new code" else data_dict['invite_code'][0],
             'members': User.objects.filter(username__in=data_dict.get('members', [])),
-            'guests': [ i.id for i in User.objects.filter(username__in=data_dict.get('guests', []))],
+            'guests': User.objects.filter(username__in=data_dict.get('guests', [])),
         }
         return rep
 
