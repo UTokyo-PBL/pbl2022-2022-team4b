@@ -1,5 +1,5 @@
-import React, { Component, useState, setState } from 'react'
-import { styled, useTheme } from '@mui/material/styles';
+import React,{useState} from 'react'
+import {styled} from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -11,13 +11,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Box from '@mui/material/Box';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SearchIcon from '@mui/icons-material/Search';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import AddIcon from '@mui/icons-material/Add';
 import PubSub from 'pubsub-js'
+// import Dialog from '@mui/material/Dialog';
 
 export const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -29,7 +32,8 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 function Sidebar(props) {
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [selectedCalendarInfo,setSelectedCalendarInfo] = useState({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]});
+    const [drawerOpen, setDrawerOpen] = useState(false);
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -37,12 +41,17 @@ function Sidebar(props) {
         setDrawerOpen(open);
         PubSub.publish('drawerOpen', drawerOpen)
     };
-    const calendarSelected = (id) => {
-        console.log(id)
-        props.mySetView(id);
+    const joinCalendar = () =>{PubSub.publish('joinCalendarDialog', true);}
+    const calendarShow = () => {PubSub.publish('delCalendarDialog', true);}
+    const addNewCalendar = () => {PubSub.publish('newCalendarDialog', true);}
+    const findSlot = () =>{
+        PubSub.publish('selectedCalendarInfo', selectedCalendarInfo);
+        PubSub.publish('findSlotDialog', true);
     }
-    const addNewCalendar = () => {
-        PubSub.publish('dialogOpen', true)
+    const calendarSelected =  (item) => {
+        setSelectedCalendarInfo(item);
+        PubSub.publish('selectedCalendarInfo', selectedCalendarInfo);
+        props.mySetView(item['id']);
     }
     const drawerWidth = 240;
     return (
@@ -101,17 +110,20 @@ function Sidebar(props) {
                 <Divider/>
                 <List>
                     <ListItem disablePadding>
-                        <ListItemButton onClick={()=>calendarSelected('all')}>
+                        <ListItemButton selected={selectedCalendarInfo['id'] === 'all'} 
+                        onClick={()=>calendarSelected({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]})}>
                             <ListItemIcon>
                                 <CalendarMonthIcon />
                             </ListItemIcon>
-                            <ListItemText primary={'all'} />
+                            <ListItemText primary={'All'} />
                         </ListItemButton>
                     </ListItem>
                     {props.calendars && props.calendars.map((item) =>{
                         return (
                         <ListItem key={item['id']} disablePadding>
-                            <ListItemButton onClick={()=>calendarSelected(item['id'])}>
+                            <ListItemButton selected={selectedCalendarInfo['id'] === item['id']} 
+                            onClick={()=>calendarSelected(item)}
+                            onDoubleClick={()=>calendarShow()}>
                                 <ListItemIcon>
                                     <CalendarMonthIcon />
                                 </ListItemIcon>
@@ -121,12 +133,22 @@ function Sidebar(props) {
                     })}
                 </List>
                 <List style={{ marginTop: `auto` }}>
+                <ListItem disablePadding>
+                        <ListItemButton onClick={findSlot}>
+                            <ListItemIcon><SearchIcon/></ListItemIcon>
+                            <ListItemText primary={'Find a slot'} />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                        <ListItemButton onClick={joinCalendar}>
+                            <ListItemIcon><GroupAddIcon/></ListItemIcon>
+                            <ListItemText primary={'Join calendar'} />
+                        </ListItemButton>
+                    </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton onClick={addNewCalendar}>
-                            <ListItemIcon>
-                                <CalendarMonthIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={'Add new calendar'} />
+                            <ListItemIcon><AddIcon /></ListItemIcon>
+                            <ListItemText primary={'Creat calendar'} />
                         </ListItemButton>
                     </ListItem>
                 </List>
@@ -134,5 +156,4 @@ function Sidebar(props) {
         </>
     )
 }
-
 export default Sidebar

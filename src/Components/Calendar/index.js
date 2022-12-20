@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
 import { styled } from '@mui/material/styles';
 import { Scheduler } from "@aldabil/react-scheduler";
 import ja from 'date-fns/locale/ja'
@@ -9,13 +9,13 @@ import Cookies from 'js-cookie';
 import axios from 'axios'
 axios.defaults.baseURL = "http://localhost:8080";
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
-}));
+// const DrawerHeader = styled('div')(({ theme }) => ({
+//     display: 'flex',
+//     alignItems: 'center',
+//     padding: theme.spacing(0, 1),
+//     ...theme.mixins.toolbar,
+//     justifyContent: 'flex-end',
+// }));
 const drawerWidth = 240;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => {
@@ -47,7 +47,7 @@ function Calendar(props) {
     };
     var events = [];
     const [drawerOpen, setDrawerOpen] = React.useState(false);
-    if(props.events.length != 0){
+    if(props.events.length !== 0){
         events = props.events.map((item)=>{
             return {
                 event_id: item["id"] + " " + item["calendar"],
@@ -74,7 +74,7 @@ function Calendar(props) {
     };
 
     const handleConfirm = (event,action)=>{
-        if(action == 'create'){
+        if(action === 'create'){
             props.addTask(event);
         }
         // action == 'edit
