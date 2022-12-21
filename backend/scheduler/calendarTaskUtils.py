@@ -14,4 +14,4 @@ def get_all_calendars(user):
     calendars = user.calendars.all()
     member_calendars = user.member_calendars.all()
     guest_calendars = user.guest_calendars.all()
-    return calendars | member_calendars | guest_calendars
+    return (calendars | member_calendars | guest_calendars).distinct()

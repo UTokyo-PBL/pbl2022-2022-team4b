@@ -63,10 +63,9 @@ class InviteCodeAPI(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets
                 return Response({
                     "Failed": "Invite code wrong"
                 })
-            calendar.members.set(calendar.members.get_queryset() | User.objects.filter(username__in=req_dict.get('members', [])))
-            calendar.guests.set(calendar.guests.get_queryset() | User.objects.filter(username__in=req_dict.get('guests', [])))
+            calendar.members.add(self.request.user)
+            # calendar.guests.set(calendar.guests.get_queryset() | User.objects.filter(username__in=req_dict.get('guests', [])))
             calendar.save()
-            print(User.objects.filter(username__in=req_dict.get('guests', [])))
             serializer = self.get_serializer(calendar)
             return Response(serializer.data)
         except BaseException as e:
