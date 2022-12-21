@@ -39,6 +39,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 function Calendar(props) {
     var events = [];
+    const colors = ['CornflowerBlue','Coral','LightCoral','HotPink','Thistle','Grey','MediumAquaMarine','DarkOrange'];
     const [drawerOpen, setDrawerOpen] = useState(false);
     if(props.events.length !== 0){
         events = props.events.map((item)=>{
@@ -47,7 +48,7 @@ function Calendar(props) {
                 title: item["title"],
                 start: new Date(item["start_time"]),
                 end: new Date(item["end_time"]),
-                // color: ;
+                color: colors[item["calendar"] % 8]
                 // disabled: false;
                 // editable: true,
                 // deletable: true,

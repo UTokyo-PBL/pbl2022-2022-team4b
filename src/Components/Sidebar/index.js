@@ -19,6 +19,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import AddIcon from '@mui/icons-material/Add';
+import Avatar from '@mui/material/Avatar';
 import PubSub from 'pubsub-js'
 // import Dialog from '@mui/material/Dialog';
 
@@ -32,6 +33,7 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 function Sidebar(props) {
+    const colors = ['CornflowerBlue','Coral','LightCoral','HotPink','Thistle','Grey','MediumAquaMarine','DarkOrange'];
     const [selectedCalendarInfo,setSelectedCalendarInfo] = useState({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]});
     const [drawerOpen, setDrawerOpen] = useState(false);
     const toggleDrawer = (open) => (event) => {
@@ -117,6 +119,7 @@ function Sidebar(props) {
                         </ListItemButton>
                     </ListItem>
                     {props.calendars && props.calendars.map((item) =>{
+                        const color = colors[item['id'] % 8];
                         return (
                         <ListItem key={item['id']} disablePadding>
                             <ListItemButton selected={selectedCalendarInfo['id'] === item['id']} 
@@ -127,6 +130,7 @@ function Sidebar(props) {
                                 </ListItemIcon>
                                 <ListItemText primary={item['title']} />
                             </ListItemButton>
+                            <Avatar sx={{ bgcolor: color,width:'8px',height:'50px',opacity:0.25}} variant="square"> </Avatar>
                         </ListItem>)
                     })}
                 </List>
