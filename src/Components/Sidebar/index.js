@@ -35,11 +35,9 @@ function Sidebar(props) {
     const [selectedCalendarInfo,setSelectedCalendarInfo] = useState({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]});
     const [drawerOpen, setDrawerOpen] = useState(false);
     const toggleDrawer = (open) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {return;}
         setDrawerOpen(open);
-        PubSub.publish('drawerOpen', drawerOpen)
+        PubSub.publish('drawerOpen', drawerOpen);
     };
     const joinCalendar = () =>{PubSub.publish('joinCalendarDialog', true);}
     const calendarShow = () => {PubSub.publish('delCalendarDialog', true);}

@@ -1,11 +1,9 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
+import ja from 'date-fns/locale/ja'
+import PubSub from 'pubsub-js'
 import { styled } from '@mui/material/styles';
 import { Scheduler } from "@aldabil/react-scheduler";
-import ja from 'date-fns/locale/ja'
 import Toolbar from '@mui/material/Toolbar';
-import PubSub from 'pubsub-js'
-import { useLocation } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import axios from 'axios'
 axios.defaults.baseURL = "http://localhost:8080";
 
@@ -40,13 +38,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 );
 
 function Calendar(props) {
-    const token = useLocation()['state']
-    const headers = {
-        'X-CSRFToken': Cookies.get('csrftoken'),
-        'authorization': 'Token ' + token,
-    };
     var events = [];
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
     if(props.events.length !== 0){
         events = props.events.map((item)=>{
             return {
@@ -63,10 +56,8 @@ function Calendar(props) {
             }
         });
     }
-    React.useEffect(() => {
-        PubSub.subscribe('drawerOpen', (_, data) => {
-            setDrawerOpen(data)
-        })
+    useEffect(() => {
+        PubSub.subscribe('drawerOpen', (_, data) => {setDrawerOpen(data)})
     }, [])
     
     const handleDelete = (deletedId)=>{
@@ -79,7 +70,7 @@ function Calendar(props) {
         }
         // action == 'edit
         else{
-            console.log('edit')
+            props.editTask(event);
         }
         return event;
     };
@@ -93,6 +84,7 @@ function Calendar(props) {
                 events = {events}
                 onConfirm = {handleConfirm}
                 onDelete={handleDelete}
+                onEventDrop= {props.dropTask}
             />
         </Main>
     )

@@ -14,14 +14,16 @@ import Dialog from '@mui/material/Dialog';
 axios.defaults.baseURL = "http://localhost:8080";
 
 const JoinCalendar = (props) => {
-    var userInfo;
     const theme = createTheme();
     const token = useLocation()['state']
     const [open, setOpen] = useState(false);
+    const [userInfo,setUserInfo] = useState({});
     const handleClose = () => {setOpen(false)}
     const headers = {'X-CSRFToken': Cookies.get('csrftoken'),'authorization': 'Token ' + token,};
-    useEffect(() => {PubSub.subscribe('joinCalendarDialog', (_, data) => {setOpen(data)})}, [])
-    axios.get('api/account/user/',{headers: headers}).then(res => {userInfo = res.data;}).catch(err => {console.log('Failed  api/account/user/');});
+    useEffect(() => {
+        PubSub.subscribe('joinCalendarDialog', (_, data) => {setOpen(data)});
+        PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
+    }, [])
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -33,8 +35,8 @@ const JoinCalendar = (props) => {
         //         'guests': [data.get('Guests')]},
         //     {headers: headers},
         // ).then(res => {
-            PubSub.publish('joinCalendarDialog', false);
-            props.getCalendarsAsync();
+        //     PubSub.publish('joinCalendarDialog', false);
+        //     props.getCalendarsAsync();
         // }).catch(err => {
         //     console.log('Fail api/scheduler/calendars/');
         // });

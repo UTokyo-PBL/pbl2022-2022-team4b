@@ -23,12 +23,11 @@ axios.defaults.baseURL = "http://localhost:8080";
 
 const FindSlot = (props) => {
     const theme = createTheme();
-    const token = useLocation()['state']
-    var userInfo;
+    const token = useLocation()['state'];
+    const [userInfo,setUserInfo] = useState({});
     const headers = {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'authorization': 'Token ' + token,};
-    axios.get('api/account/user/',{headers: headers}).then(res => {userInfo = res.data;}).catch(err => {console.log('Failed  api/account/user/'); });
     const [calendarInfo, setCalendarInfo] = useState({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]});
     const [open, setOpen] = useState(false);
     const handleClose = () => { setOpen(false)}
@@ -41,6 +40,7 @@ const FindSlot = (props) => {
     useEffect(() => {
         PubSub.subscribe('findSlotDialog', (_, data) => {setOpen(data)});
         PubSub.subscribe('selectedCalendarInfo', (_, data) => {setCalendarInfo(data)});
+        PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
     }, [])
 
     const handleSubmit = (event) => {

@@ -14,45 +14,39 @@ import Dialog from '@mui/material/Dialog';
 axios.defaults.baseURL = "http://localhost:8080";
 
 const EditCalendar = (props) => {
-    const [calendarInfo, setCalendarInfo] = useState({ id: 'all', title: 'all', description: 'all calendars', owner: '', members: [], guests: [] });
-    const [open, setOpen] = useState(false);
-    const handleClose = () => { setOpen(false) }
-    useEffect(() => {
-        PubSub.subscribe('editCalendarDialog', (_, data) => {setOpen(data)});
-        PubSub.subscribe('selectedCalendarInfo', (_, data) => { setCalendarInfo(data)});
-    }, [])
-
     const theme = createTheme();
     const token = useLocation()['state']
-    var userInfo;
+    const [userInfo,setUserInfo] = useState({});
+    const [calendarInfo, setCalendarInfo] = useState({ id: 'all', title: 'all', description: 'all calendars', owner: '', members: [], guests: [] });
+    const [open, setOpen] = useState(false);
     const headers = {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'authorization': 'Token ' + token,
     };
-    axios.get('api/account/user/', { headers: headers })
-        .then(res => {
-            userInfo = res.data;
-        }).catch(err => {
-            console.log('Failed  api/account/user/');
-        });
-
+    useEffect(() => {
+        PubSub.subscribe('editCalendarDialog', (_, data) => {setOpen(data)});
+        PubSub.subscribe('selectedCalendarInfo', (_, data) => { setCalendarInfo(data)});
+        PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
+    }, [])
+    const handleClose = () => { setOpen(false) }
     const handleSubmit = (event) => {
-        // event.preventDefault();
-        // const data = new FormData(event.currentTarget);
-        // axios.post('api/scheduler/calendars/',
-        //     {
-        //         'owner': [userInfo['email']],
-        //         'title': data.get('Calendar'),
-        //         'description': data.get('Description'),
-        //         'members': [data.get('Members')],
-        //         'guests': [data.get('Guests')]
-        //     },
-        //     { headers: headers },
-        // ).then(res => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        axios.put('api/scheduler/calendars/'+ calendarInfo['id'] +'/',
+            {
+                'owner': [userInfo['email']],
+                'title': data.get('Calendar'),
+                'description': data.get('Description'),
+                'members': data.get('Members').split(';'),
+                'guests': data.get('Guests').split(';')
+            },
+            { headers: headers },
+        ).then(res => {
+            props.getCalendarsAsync();
             PubSub.publish('editCalendarDialog', false);
-        // }).catch(err => {
-        //     console.log('Fail api/scheduler/calendars/');
-        // });
+        }).catch(err => {
+            console.log('Fail api/scheduler/calendars/');
+        });
     };
 
     return (
@@ -69,6 +63,7 @@ const EditCalendar = (props) => {
                             label="Calendar Name"
                             name="Calendar"
                             autoComplete="Calendar"
+                            defaultValue= {calendarInfo['title']}
                             autoFocus
                         />
                         <TextField
@@ -77,19 +72,23 @@ const EditCalendar = (props) => {
                             fullWidth
                             name="Description"
                             label="Description"
-                            type="Description"
-                            id="Description"
-                            autoComplete="Description"
+                            defaultValue= {calendarInfo['description']}
                         />
                         <TextField
                             margin="normal"
-                            required
                             fullWidth
                             name="Members"
                             label="Members"
-                            type="Members"
-                            id="Members"
                             autoComplete="Members"
+                            defaultValue= {calendarInfo['members']}
+                        />
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            name="Guests"
+                            label="Guests"
+                            autoComplete="Guests"
+                            defaultValue= {calendarInfo['guests']}
                         />
                         <Button
                             startIcon={<UpgradeIcon />}

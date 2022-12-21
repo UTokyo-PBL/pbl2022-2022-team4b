@@ -8,34 +8,25 @@ import Container from '@mui/material/Container';
 import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
 import axios from 'axios'
-
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
 import AddIcon from '@mui/icons-material/Add';
 axios.defaults.baseURL = "http://localhost:8080";
 
 const AddCalendar = (props) => {
+    const [userInfo,setUserInfo] = useState({});
     const [open, setOpen] = useState(false);
     const handleClose = () => { setOpen(false) }
     useEffect(() => {
-        PubSub.subscribe('newCalendarDialog', (_, data) => {
-            setOpen(data)
-        })
+        PubSub.subscribe('newCalendarDialog', (_, data) => {setOpen(data)})
+        PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
     }, [])
-
     const theme = createTheme();
     const token = useLocation()['state']
-    var userInfo;
     const headers = {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'authorization': 'Token ' + token,
     };
-    axios.get('api/account/user/', { headers: headers })
-        .then(res => {
-            userInfo = res.data;
-        }).catch(err => {
-            console.log('Failed  api/account/user/');
-        });
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -45,8 +36,8 @@ const AddCalendar = (props) => {
                 'owner': [userInfo['email']],
                 'title': data.get('Calendar'),
                 'description': data.get('Description'),
-                'members': [data.get('Members')],
-                'guests': [data.get('Guests')]
+                'members': data.get('Members').split(';'),
+                'guests': data.get('Guests').split(';')
             },
             { headers: headers },
         ).then(res => {
