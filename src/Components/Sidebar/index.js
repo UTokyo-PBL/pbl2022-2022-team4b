@@ -1,5 +1,5 @@
-import React,{useState} from 'react'
-import {styled} from '@mui/material/styles';
+import React, { useState, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -21,6 +21,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import AddIcon from '@mui/icons-material/Add';
 import Avatar from '@mui/material/Avatar';
 import PubSub from 'pubsub-js'
+import { useNavigate } from 'react-router-dom';
 // import Dialog from '@mui/material/Dialog';
 
 export const DrawerHeader = styled('div')(({ theme }) => ({
@@ -33,27 +34,40 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 function Sidebar(props) {
-    const colors = ['CornflowerBlue','Coral','LightCoral','HotPink','Thistle','Grey','MediumAquaMarine','DarkOrange'];
-    const [selectedCalendarInfo,setSelectedCalendarInfo] = useState({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]});
+   
+    const colors = ['CornflowerBlue', 'Coral', 'LightCoral', 'HotPink', 'Thistle', 'Grey', 'MediumAquaMarine', 'DarkOrange'];
+    const [selectedCalendarInfo, setSelectedCalendarInfo] = useState({ id: 'all', title: 'all', description: 'all calendars', owner: '', members: [], guests: [] });
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [token, setToken] = useState('')
     const toggleDrawer = (open) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {return;}
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) { return; }
         setDrawerOpen(open);
         PubSub.publish('drawerOpen', drawerOpen);
     };
-    const joinCalendar = () =>{PubSub.publish('joinCalendarDialog', true);}
-    const calendarShow = () => {PubSub.publish('delCalendarDialog', true);}
-    const addNewCalendar = () => {PubSub.publish('newCalendarDialog', true);}
-    const findSlot = () =>{
+    const joinCalendar = () => { PubSub.publish('joinCalendarDialog', true); }
+    const calendarShow = () => { PubSub.publish('delCalendarDialog', true); }
+    const addNewCalendar = () => { PubSub.publish('newCalendarDialog', true); }
+    const findSlot = () => {
         PubSub.publish('selectedCalendarInfo', selectedCalendarInfo);
         PubSub.publish('findSlotDialog', true);
     }
-    const calendarSelected =  (item) => {
+    const calendarSelected = (item) => {
         setSelectedCalendarInfo(item);
         PubSub.publish('selectedCalendarInfo', selectedCalendarInfo);
         props.mySetView(item['id']);
     }
+    const navigate = useNavigate()
     const drawerWidth = 240;
+
+    useEffect(() => {
+
+        PubSub.subscribe('token', (_, data) => {
+            setToken(data)
+        })
+
+
+    }, [])
+
     return (
         <>
             <CssBaseline />
@@ -94,11 +108,13 @@ function Sidebar(props) {
                     </IconButton>
                 </DrawerHeader>
 
-                <Divider/>
+                <Divider />
                 <List>
                     {['Notes'].map((text) => (
                         <ListItem key={text} disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => navigate('/settings/account', {
+                                state: token
+                            })}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>
@@ -107,43 +123,43 @@ function Sidebar(props) {
                         </ListItem>
                     ))}
                 </List>
-                <Divider/>
+                <Divider />
                 <List>
                     <ListItem disablePadding>
-                        <ListItemButton selected={selectedCalendarInfo['id'] === 'all'} 
-                        onClick={()=>calendarSelected({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]})}>
+                        <ListItemButton selected={selectedCalendarInfo['id'] === 'all'}
+                            onClick={() => calendarSelected({ id: 'all', title: 'all', description: 'all calendars', owner: '', members: [], guests: [] })}>
                             <ListItemIcon>
                                 <CalendarMonthIcon />
                             </ListItemIcon>
                             <ListItemText primary={'All'} />
                         </ListItemButton>
                     </ListItem>
-                    {props.calendars && props.calendars.map((item) =>{
+                    {props.calendars && props.calendars.map((item) => {
                         const color = colors[item['id'] % 8];
                         return (
-                        <ListItem key={item['id']} disablePadding>
-                            <ListItemButton selected={selectedCalendarInfo['id'] === item['id']} 
-                            onClick={()=>calendarSelected(item)}
-                            onDoubleClick={()=>calendarShow()}>
-                                <ListItemIcon>
-                                    <CalendarMonthIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={item['title']} />
-                            </ListItemButton>
-                            <Avatar sx={{ bgcolor: color,width:'8px',height:'50px',opacity:0.25}} variant="square"> </Avatar>
-                        </ListItem>)
+                            <ListItem key={item['id']} disablePadding>
+                                <ListItemButton selected={selectedCalendarInfo['id'] === item['id']}
+                                    onClick={() => calendarSelected(item)}
+                                    onDoubleClick={() => calendarShow()}>
+                                    <ListItemIcon>
+                                        <CalendarMonthIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={item['title']} />
+                                </ListItemButton>
+                                <Avatar sx={{ bgcolor: color, width: '8px', height: '50px', opacity: 0.25 }} variant="square"> </Avatar>
+                            </ListItem>)
                     })}
                 </List>
                 <List style={{ marginTop: `auto` }}>
-                <ListItem disablePadding>
+                    <ListItem disablePadding>
                         <ListItemButton onClick={findSlot}>
-                            <ListItemIcon><SearchIcon/></ListItemIcon>
+                            <ListItemIcon><SearchIcon /></ListItemIcon>
                             <ListItemText primary={'Find a slot'} />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
                         <ListItemButton onClick={joinCalendar}>
-                            <ListItemIcon><GroupAddIcon/></ListItemIcon>
+                            <ListItemIcon><GroupAddIcon /></ListItemIcon>
                             <ListItemText primary={'Join calendar'} />
                         </ListItemButton>
                     </ListItem>

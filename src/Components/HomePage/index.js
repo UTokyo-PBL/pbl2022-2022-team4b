@@ -48,6 +48,7 @@ function HomePage(props) {
         try {
             const res = await axios.get('api/account/user/',{headers: headers});
             await PubSub.publish('userInfo',res.data);
+            await PubSub.publish('token', token)
         }
         catch (err) {
             console.log('Failed  api/account/user/');
