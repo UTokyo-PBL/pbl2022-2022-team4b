@@ -49,7 +49,9 @@ new_task = {
 find_slot = {
     'start_time': get_time(2022,12,10).isoformat(),
     'end_time': get_time(2022,12,11).isoformat(),
-    'duration': 180
+    'duration': 180,
+    'start_index': 15,
+    'end_index': 20
 }
 
 # Account TEST

@@ -85,19 +85,21 @@ class FindSlotAPI(generics.GenericAPIView):
             duration = datetime.timedelta(minutes=int(req_dict['duration']))
             start_time = datetime.datetime.fromisoformat(req_dict["start_time"])
             end_time = datetime.datetime.fromisoformat(req_dict["end_time"])
+            start_index = int(req_dict.get('start_index'))
+            end_index = int(req_dict.get('end_index'))
+            print(start_index, end_index)
             calendar_list = get_all_calendars(self.request.user)
             tasks = Task.objects.filter(calendar__in=calendar_list).filter(start_time__range=(start_time,end_time))
             task_list = [(t.start_time, t.end_time) for t in tasks]
-            best_start_time, total_conflict_time, total_conflict_member = allocate_free_slot(duration, task_list, task_span=(start_time, end_time))
-            return Response({
-                "best_start_time": best_start_time,
-                "total_conflict_time": total_conflict_time,
-                "total_conflict_members": total_conflict_member
-            })
+            candidate_list:list = allocate_free_slot(duration, task_list, task_span=(start_time, end_time))
+            # candidate_list: a list of tuple [(best_start_time_for_task, total_conflict_time, total_conflict_member)...]
+            if end_index < len(candidate_list):
+                return Response(candidate_list[start_index:end_index])
+            elif start_index < len(candidate_list):
+                return Response(candidate_list[start_index:len(candidate_list)-1])
+            else:
+                return Response([])
         except BaseException as e:
             return Response({
                 "Failed": str(e)
             })
-        # return Response({
-        #     "Failed": 0
-        # })

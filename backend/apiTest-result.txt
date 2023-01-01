@@ -12,8 +12,8 @@ content: {
 
 status: 200
 content: {
-  "expiry": "2022-12-21T00:31:47.777536Z",
-  "token": "e19b85202b0819db2729e73fb8ce317f31bcefdd36c24cb59bea1a252005f3f2"
+  "expiry": "2023-01-02T00:42:02.103625Z",
+  "token": "744cb702d34e070d487690e3fd32dee9810f651750bda45c07aad8a0c94d3a76"
 }
 
 ### (GET)user info ###
@@ -33,13 +33,24 @@ content: {
 status: 200
 content: [
   {
-    "id": 149,
-    "title": "test1",
-    "created_time": "2022-12-15T14:20:55.922718Z",
-    "description": "calendar created by react",
+    "id": 165,
+    "title": "['calendar111']",
+    "created_time": "2022-12-21T14:49:50.139081Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 172,
+    "title": "['calendar111']",
+    "created_time": "2023-01-01T14:39:18.975297Z",
+    "description": "['updated test calendar 111']",
     "owner": "user1@test.com",
     "members": [
-      "user2@test.com"
+      "user3@test.com"
     ],
     "guests": []
   }
@@ -49,17 +60,18 @@ content: [
 
 status: 201
 content: {
-  "id": 154,
+  "id": 174,
   "title": [
     "calendar111"
   ],
-  "created_time": "2022-12-20T14:31:47.828527Z",
+  "created_time": "2023-01-01T14:42:02.244657Z",
   "description": [
     "test calendar 111"
   ],
   "owner": "user1@test.com",
   "members": [
-    "user2@test.com"
+    "user2@test.com",
+    "user3@test.com"
   ],
   "guests": []
 }
@@ -69,24 +81,36 @@ content: {
 status: 200
 content: [
   {
-    "id": 149,
-    "title": "test1",
-    "created_time": "2022-12-15T14:20:55.922718Z",
-    "description": "calendar created by react",
+    "id": 165,
+    "title": "['calendar111']",
+    "created_time": "2022-12-21T14:49:50.139081Z",
+    "description": "['updated test calendar 111']",
+    "owner": "user1@test.com",
+    "members": [],
+    "guests": [
+      "user2@test.com"
+    ]
+  },
+  {
+    "id": 172,
+    "title": "['calendar111']",
+    "created_time": "2023-01-01T14:39:18.975297Z",
+    "description": "['updated test calendar 111']",
     "owner": "user1@test.com",
     "members": [
-      "user2@test.com"
+      "user3@test.com"
     ],
     "guests": []
   },
   {
-    "id": 154,
+    "id": 174,
     "title": "['calendar111']",
-    "created_time": "2022-12-20T14:31:47.828527Z",
+    "created_time": "2023-01-01T14:42:02.244657Z",
     "description": "['test calendar 111']",
     "owner": "user1@test.com",
     "members": [
-      "user2@test.com"
+      "user2@test.com",
+      "user3@test.com"
     ],
     "guests": []
   }
@@ -96,11 +120,11 @@ content: [
 
 status: 200
 content: {
-  "id": 154,
+  "id": 174,
   "title": [
     "calendar111"
   ],
-  "created_time": "2022-12-20T14:31:47.828527Z",
+  "created_time": "2023-01-01T14:42:02.244657Z",
   "description": [
     "updated test calendar 111"
   ],
@@ -115,70 +139,15 @@ content: {
 
 status: 200
 content: {
-  "id": 154,
+  "id": 174,
   "title": "['calendar111']",
-  "created_time": "2022-12-20T14:31:47.828527Z",
+  "created_time": "2023-01-01T14:42:02.244657Z",
   "description": "['updated test calendar 111']",
   "owner": "user1@test.com",
   "members": [
     "user3@test.com"
   ],
   "guests": []
-}
-
-### (GET)invite code ###
-
-status: 200
-content: {
-  "id": 154,
-  "invite_code": "LI9NxxiykT",
-  "members": [
-    "user3@test.com"
-  ],
-  "guests": []
-}
-
-### (PUT)update members/guests ###
-
-status: 200
-content: {
-  "id": 154,
-  "invite_code": "LI9NxxiykT",
-  "members": [
-    "user3@test.com"
-  ],
-  "guests": [
-    "user2@test.com"
-  ]
-}
-
-### (GET)added calendar ###
-
-status: 200
-content: {
-  "id": 154,
-  "title": "['calendar111']",
-  "created_time": "2022-12-20T14:31:47.828527Z",
-  "description": "['updated test calendar 111']",
-  "owner": "user1@test.com",
-  "members": [
-    "user3@test.com"
-  ],
-  "guests": [
-    "user2@test.com"
-  ]
-}
-
-### (PUT)update invite code ###
-
-status: 200
-content: {
-  "id": 154,
-  "invite_code": "uo1DQA2mEh",
-  "members": [],
-  "guests": [
-    "user2@test.com"
-  ]
 }
 
 ### (GET)task info ###
@@ -190,11 +159,11 @@ content: []
 
 status: 201
 content: {
-  "id": 103,
+  "id": 116,
   "title": "task111",
   "description": "test task 111",
   "completed": false,
-  "calendar": 154,
+  "calendar": 174,
   "start_time": "2022-12-10T10:00:00Z",
   "end_time": "2022-12-10T11:30:00Z"
 }
@@ -202,21 +171,17 @@ content: {
 ### (POST)find slot  ###
 
 status: 200
-content: {
-  "best_start_time": "2022-12-10T11:30:00Z",
-  "total_conflict_time": "0.0",
-  "total_conflict_members": 0
-}
+content: []
 
 ### (UPDATE)task update ###
 
 status: 200
 content: {
-  "id": 103,
+  "id": 116,
   "title": "task111",
   "description": "updated test task 111",
   "completed": false,
-  "calendar": 154,
+  "calendar": 174,
   "start_time": "2022-12-10T10:00:00Z",
   "end_time": "2022-12-10T16:00:00Z"
 }
@@ -224,21 +189,17 @@ content: {
 ### (POST)find slot  ###
 
 status: 200
-content: {
-  "best_start_time": "2022-12-10T16:00:00Z",
-  "total_conflict_time": "0.0",
-  "total_conflict_members": 0
-}
+content: []
 
 ### (GET)task info ###
 
 status: 200
 content: {
-  "id": 103,
+  "id": 116,
   "title": "task111",
   "description": "updated test task 111",
   "completed": false,
-  "calendar": 154,
+  "calendar": 174,
   "start_time": "2022-12-10T10:00:00Z",
   "end_time": "2022-12-10T16:00:00Z"
 }
@@ -248,11 +209,20 @@ content: {
 status: 200
 content: [
   {
-    "id": 103,
+    "id": 114,
+    "title": "task111",
+    "description": "test task 111",
+    "completed": false,
+    "calendar": 172,
+    "start_time": "2022-12-10T10:00:00Z",
+    "end_time": "2022-12-10T11:30:00Z"
+  },
+  {
+    "id": 116,
     "title": "task111",
     "description": "updated test task 111",
     "completed": false,
-    "calendar": 154,
+    "calendar": 174,
     "start_time": "2022-12-10T10:00:00Z",
     "end_time": "2022-12-10T16:00:00Z"
   }
@@ -263,11 +233,11 @@ content: [
 status: 200
 content: [
   {
-    "id": 103,
+    "id": 116,
     "title": "task111",
     "description": "updated test task 111",
     "completed": false,
-    "calendar": 154,
+    "calendar": 174,
     "start_time": "2022-12-10T10:00:00Z",
     "end_time": "2022-12-10T16:00:00Z"
   }
@@ -281,6 +251,71 @@ content: []
 ### (DELETE)delete task ###
 
 status: 204
+
+### (GET)invite code ###
+
+status: 200
+content: {
+  "id": 174,
+  "invite_code": "z5djhGMI2F",
+  "members": [
+    "user3@test.com"
+  ],
+  "guests": []
+}
+
+### (POST)user1 logout ###
+
+status: 204
+
+### (POST)user2 login ###
+
+status: 200
+content: {
+  "expiry": "2023-01-02T00:42:03.164669Z",
+  "token": "39e0e581789e3495c4f6e596b5f7c84eda884e99545b7943efe77e1fd5b4f023"
+}
+
+### (PUT)update members/guests ###
+
+status: 200
+content: {
+  "id": 174,
+  "invite_code": "z5djhGMI2F",
+  "members": [
+    "user2@test.com",
+    "user3@test.com"
+  ],
+  "guests": []
+}
+
+### (GET)added calendar ###
+
+status: 200
+content: {
+  "id": 174,
+  "title": "['calendar111']",
+  "created_time": "2023-01-01T14:42:02.244657Z",
+  "description": "['updated test calendar 111']",
+  "owner": "user1@test.com",
+  "members": [
+    "user2@test.com",
+    "user3@test.com"
+  ],
+  "guests": []
+}
+
+### (PUT)update invite code ###
+
+status: 200
+content: {
+  "id": 174,
+  "invite_code": "PBjQP3BY5A",
+  "members": [],
+  "guests": [
+    "user2@test.com"
+  ]
+}
 
 ### (DELETE)delete calendar ###
 
