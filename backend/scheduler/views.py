@@ -59,7 +59,7 @@ class InviteCodeAPI(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets
         try:
             req_dict:dict = dict(request.data)
             calendar = Calendar.objects.get(pk=pk)
-            if not calendar.invite_code == req_dict.get('invite_code')[0]:
+            if not calendar.invite_code == req_dict.get('invite_code'):
                 return Response({
                     "Failed": "Invite code wrong"
                 })
@@ -80,14 +80,12 @@ class FindSlotAPI(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            req_dict:dict = request.data.dict()
-            print(req_dict['duration'])
+            req_dict:dict = dict(request.data)
             duration = datetime.timedelta(minutes=int(req_dict['duration']))
             start_time = datetime.datetime.fromisoformat(req_dict["start_time"])
             end_time = datetime.datetime.fromisoformat(req_dict["end_time"])
             start_index = int(req_dict.get('start_index'))
             end_index = int(req_dict.get('end_index'))
-            print(start_index, end_index)
             calendar_list = get_all_calendars(self.request.user)
             tasks = Task.objects.filter(calendar__in=calendar_list).filter(start_time__range=(start_time,end_time))
             task_list = [(t.start_time, t.end_time) for t in tasks]

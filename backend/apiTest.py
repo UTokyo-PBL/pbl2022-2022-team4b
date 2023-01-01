@@ -43,25 +43,25 @@ new_task = {
     'title': "task111",
     'description': "test task 111",
     'calendar': 0,
-    'start_time': get_time(2022,12,10,10,0),
-    'end_time': get_time(2022,12,10,11,30),
+    'start_time': get_time(2022,12,10,10,0).isoformat(),
+    'end_time': get_time(2022,12,10,11,30).isoformat(),
 }
 find_slot = {
     'start_time': get_time(2022,12,10).isoformat(),
     'end_time': get_time(2022,12,11).isoformat(),
     'duration': 180,
-    'start_index': 15,
-    'end_index': 20
+    'start_index': 0,
+    'end_index': 9
 }
 
 # Account TEST
 
 print("\n### (POST)register ###\n")
-response = requests.post('http://localhost:8000/api/account/register/', data=register_data)
+response = requests.post('http://localhost:8000/api/account/register/', json=register_data)
 print_resp(response)
 
 print("\n### (POST)login ###\n")
-response = requests.post('http://localhost:8000/api/account/login/', data=login_data)
+response = requests.post('http://localhost:8000/api/account/login/', json=login_data)
 print_resp(response)
 
 headers = {
@@ -79,7 +79,7 @@ response = requests.get('http://localhost:8000/api/scheduler/calendars/', header
 print_resp(response)
 
 print("\n### (POST)new calendar  ###\n")
-response = requests.post('http://localhost:8000/api/scheduler/calendars/', headers=headers, data=new_calendar)
+response = requests.post('http://localhost:8000/api/scheduler/calendars/', headers=headers, json=new_calendar)
 print_resp(response)
 
 calendar_id = response.json()['id']
@@ -92,7 +92,7 @@ print("\n### (UPDATE)calendar update ###\n")
 new_new_calendar = new_calendar.copy()
 new_new_calendar['description'] = 'updated test calendar 111'
 new_new_calendar['members'] = ['user3@test.com']
-response = requests.put(f"http://localhost:8000/api/scheduler/calendars/{calendar_id}/", headers=headers, data=new_new_calendar)
+response = requests.put(f"http://localhost:8000/api/scheduler/calendars/{calendar_id}/", headers=headers, json=new_new_calendar)
 print_resp(response)
 
 print("\n### (GET)updated calendar ###\n")
@@ -110,28 +110,28 @@ response = requests.get(f'http://localhost:8000/api/scheduler/tasks/?{params}', 
 print_resp(response)
 
 print("\n### (POST)new task  ###\n")
-response = requests.post('http://localhost:8000/api/scheduler/tasks/', headers=headers, data=new_task)
+response = requests.post('http://localhost:8000/api/scheduler/tasks/', headers=headers, json=new_task)
 # POST /api/scheduler/tasks/
 print_resp(response)
 
 task_id = response.json()['id']
 
 print("\n### (POST)find slot  ###\n")
-response = requests.post('http://localhost:8000/api/scheduler/findslot/', headers=headers, data=find_slot)
+response = requests.post('http://localhost:8000/api/scheduler/findslot/', headers=headers, json=find_slot)
 # POST /api/scheduler/findslot/
 print_resp(response)
 
 print("\n### (UPDATE)task update ###\n")
 new_new_task = new_task.copy()
 new_new_task['description'] = 'updated test task 111'
-new_new_task['end_time'] = datetime.datetime(2022,12,10,16,0)
+new_new_task['end_time'] = get_time(2022,12,10,16,0).isoformat()
 params = f"calendar={calendar_id}"
-response = requests.put(f"http://localhost:8000/api/scheduler/tasks/{task_id}/?{params}", headers=headers, data=new_new_task)
+response = requests.put(f"http://localhost:8000/api/scheduler/tasks/{task_id}/?{params}", headers=headers, json=new_new_task)
 # PUT /api/scheduler/tasks/51/?calendar=91
 print_resp(response)
 
 print("\n### (POST)find slot  ###\n")
-response = requests.post('http://localhost:8000/api/scheduler/findslot/', headers=headers, data=find_slot)
+response = requests.post('http://localhost:8000/api/scheduler/findslot/', headers=headers, json=find_slot)
 # POST /api/scheduler/findslot/
 print_resp(response)
 
@@ -181,7 +181,7 @@ print(f"status: {response.status_code}")
 
 print("\n### (POST)user2 login ###\n")
 login_data = {"username":"user2@test.com", "password": "cnmtest2"}
-response = requests.post('http://localhost:8000/api/account/login/', data=login_data)
+response = requests.post('http://localhost:8000/api/account/login/', json=login_data)
 print_resp(response)
 
 headers = {
@@ -189,9 +189,9 @@ headers = {
 }
 
 print("\n### (PUT)update members/guests ###\n")
-new_list = dict()
-new_list['invite_code'] = invite_code
-response = requests.put(f'http://localhost:8000/api/scheduler/invitecode/{calendar_id}/add/', headers=headers, data=new_list)
+new_list = {'invite_code': invite_code}
+new_list['test'] = 'test'
+response = requests.put(f'http://localhost:8000/api/scheduler/invitecode/{calendar_id}/add/', headers=headers, json=new_list)
 print_resp(response)
 
 print("\n### (GET)added calendar ###\n")
@@ -202,7 +202,7 @@ print("\n### (PUT)update invite code ###\n")
 new_list['invite_code'] = "new code"  # Reset the code as 'new code', informing the backend to create a new one
 new_list['members'] = []
 new_list['guests'] = guests
-response = requests.put(f'http://localhost:8000/api/scheduler/invitecode/{calendar_id}/', headers=headers, data=new_list)
+response = requests.put(f'http://localhost:8000/api/scheduler/invitecode/{calendar_id}/', headers=headers, json=new_list)
 print_resp(response)
 
 
