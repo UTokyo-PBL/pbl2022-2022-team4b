@@ -17,31 +17,26 @@ const JoinCalendar = (props) => {
     const theme = createTheme();
     const token = useLocation()['state']
     const [open, setOpen] = useState(false);
-    const [userInfo,setUserInfo] = useState({});
     const handleClose = () => {setOpen(false)}
     const headers = {'X-CSRFToken': Cookies.get('csrftoken'),'authorization': 'Token ' + token,};
     useEffect(() => {
         PubSub.subscribe('joinCalendarDialog', (_, data) => {setOpen(data)});
-        PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
     }, [])
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        // axios.post('api/scheduler/calendars/', 
-        //     {   'owner': [userInfo['email']],
-        //         'title': data.get('Calendar'),
-        //         'description': data.get('Description'),
-        //         'members': [data.get('Members')],
-        //         'guests': [data.get('Guests')]},
-        //     {headers: headers},
-        // ).then(res => {
-        //     PubSub.publish('joinCalendarDialog', false);
-        //     props.getCalendarsAsync();
-        // }).catch(err => {
-        //     console.log('Fail api/scheduler/calendars/');
-        // });
+        console.log('api/scheduler/invitecode/' + data.get('CalendarID') + '/add/');
+        axios.put('api/scheduler/invitecode/' + data.get('CalendarID') + '/add/', 
+            {'invite_code': data.get('InviteCode')},
+            {headers: headers},
+        ).then(res => {
+            PubSub.publish('joinCalendarDialog', false);
+            props.getCalendarsAsync();
+        }).catch(err => {
+            console.log('Fail api/scheduler/invitecode/{calendar_id}/add/');
+        });
     };
-
+    
     return (
         <Dialog onClose={handleClose} open={open}>
         <ThemeProvider theme={theme}>
@@ -52,10 +47,20 @@ const JoinCalendar = (props) => {
                         margin="normal"
                         required
                         fullWidth
-                        id="Invite Code"
-                        label="Invite Code"
+                        id="CalendarID"
+                        label="CalendarID"
+                        name="CalendarID"
+                        autoComplete="CalendarID"
+                        autoFocus
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="InviteCode"
+                        label="InviteCode"
                         name="InviteCode"
-                        autoComplete="Invite Code"
+                        autoComplete="InviteCode"
                         autoFocus
                     />
                     <Button

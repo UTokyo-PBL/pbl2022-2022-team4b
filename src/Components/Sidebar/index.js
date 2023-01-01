@@ -34,7 +34,6 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 function Sidebar(props) {
-   
     const colors = ['CornflowerBlue', 'Coral', 'LightCoral', 'HotPink', 'Thistle', 'Grey', 'MediumAquaMarine', 'DarkOrange'];
     const [selectedCalendarInfo, setSelectedCalendarInfo] = useState({ id: 'all', title: 'all', description: 'all calendars', owner: '', members: [], guests: [] });
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -51,6 +50,7 @@ function Sidebar(props) {
         PubSub.publish('selectedCalendarInfo', selectedCalendarInfo);
         PubSub.publish('findSlotDialog', true);
     }
+    
     const calendarSelected = (item) => {
         setSelectedCalendarInfo(item);
         PubSub.publish('selectedCalendarInfo', selectedCalendarInfo);
@@ -59,14 +59,7 @@ function Sidebar(props) {
     const navigate = useNavigate()
     const drawerWidth = 240;
 
-    useEffect(() => {
-
-        PubSub.subscribe('token', (_, data) => {
-            setToken(data)
-        })
-
-
-    }, [])
+    useEffect(() => {PubSub.subscribe('token', (_, data) => { setToken(data) })}, [])
 
     return (
         <>

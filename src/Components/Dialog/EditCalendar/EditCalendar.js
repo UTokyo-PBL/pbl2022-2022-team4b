@@ -15,7 +15,7 @@ axios.defaults.baseURL = "http://localhost:8080";
 
 const EditCalendar = (props) => {
     const theme = createTheme();
-    const token = useLocation()['state']
+    const token = useLocation()['state'];
     const [userInfo,setUserInfo] = useState({});
     const [calendarInfo, setCalendarInfo] = useState({ id: 'all', title: 'all', description: 'all calendars', owner: '', members: [], guests: [] });
     const [open, setOpen] = useState(false);

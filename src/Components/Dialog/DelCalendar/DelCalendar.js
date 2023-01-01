@@ -17,6 +17,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import PersonIcon from '@mui/icons-material/Person';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
 import axios from 'axios'
@@ -24,13 +25,15 @@ axios.defaults.baseURL = "http://localhost:8080";
 
 const DelCalendar = (props) => {
     const [open, setOpen] = useState(false);
+    const [inviteCode,setInviteCode] = useState('');
     const [calendarInfo, setCalendarInfo] = useState({ id: 'all', title: 'all', description: 'all calendars', owner: '', members: [], guests: [] });
     const handleClose = () => { setOpen(false) }
     const theme = createTheme();
-    const token = useLocation()['state']
+    
     useEffect(() => {
         PubSub.subscribe('delCalendarDialog', (_, data) => { setOpen(data) });
-        PubSub.subscribe('selectedCalendarInfo', (_, data) => { setCalendarInfo(data) });
+        PubSub.subscribe('inviteCode', (_, data) => {setInviteCode(data) });
+        PubSub.subscribe('selectedCalendarInfo', (_, data) => {setCalendarInfo(data)});
     }, [])
 
     const handleDel = (event) => {
@@ -49,7 +52,8 @@ const DelCalendar = (props) => {
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">
                     <Typography sx={{ mb: 1, height: '40px', paddingTop: '15px', textAlign: 'center', fontSize: '20px' }} variant="h6" component="div">{calendarInfo['title']}</Typography>
-                    <Typography sx={{ height: '16px', textAlign: 'center', fontSize: '12px' }} variant="h6" component="div">{calendarInfo['description']}</Typography>
+                    <Typography sx={{ height: '16px', textAlign: 'center', fontSize: '12px' }} variant="h6" component="div">Description:{calendarInfo['description']}</Typography>
+                    <Typography sx={{ height: '16px', textAlign: 'center', fontSize: '12px' }} variant="h6" component="div">ID:{calendarInfo['id']}</Typography>
                     <List>
                         {calendarInfo['owner'] &&
                             <ListItem key={calendarInfo['owner']} disablePadding>
@@ -85,6 +89,17 @@ const DelCalendar = (props) => {
                                 </ListItemButton>
                             </ListItem>
                         </List>))}
+                    <Divider />
+                        <List>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <VpnKeyIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={inviteCode} />
+                                </ListItemButton>
+                            </ListItem>
+                        </List>
                     <Divider />
                     <Stack direction="row">
                         <Button

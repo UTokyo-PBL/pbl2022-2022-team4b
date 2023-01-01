@@ -20,12 +20,25 @@ function HomePage(props) {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'authorization': 'Token ' + token,
     };
+    const [inviteCode,setInviteCode] = useState('');
     const [calendars, setCalendars] = useState([]);
     const [events, setEvents] = useState([]);
+    const getInviteCode = async (id)=>{
+        try {
+            const res = await axios.get('api/scheduler/invitecode/' + id + '/',{headers: headers});
+            setInviteCode(res.data['invite_code']);
+            console.log(res.data);
+            await PubSub.publish('inviteCode',inviteCode);
+        }
+        catch (err) {
+            console.log('Failed  api/scheduler/invitecode/{id}');
+        };
+    }
     const getCalendarsAsync = async () => {
         try {
             const res = await axios.get('api/scheduler/calendars/', { headers: headers });
             await setCalendars(res.data);
+            await mySetView('all');
         }
         catch (err) {
             console.log('Failed  api/scheduler/calendars/');
@@ -42,6 +55,9 @@ function HomePage(props) {
     }
     const mySetView = async (id) => {
         view = id;
+        if(id != 'all'){ 
+            await getInviteCode(id);
+        }
         await getEventsAsync(id);
     }
     const getUserInfo = async ()=>{
@@ -132,12 +148,12 @@ function HomePage(props) {
 
     return (
         <>
-            <Sidebar calendars={calendars} mySetView={mySetView} />
+            <Sidebar calendars={calendars} mySetView={mySetView}  />
             <Calendar events={events} addTask={addTask} delTask={delTask} editTask={editTask} dropTask={dropTask}/>
             <AddCalendar getCalendarsAsync={getCalendarsAsync}></AddCalendar>
             <FindSlot ></FindSlot>
             <DelCalendar delCalendar={delCalendar}></DelCalendar>
-            <JoinCalendar></JoinCalendar>
+            <JoinCalendar getCalendarsAsync={getCalendarsAsync}></JoinCalendar>
             <EditCalendar getCalendarsAsync={getCalendarsAsync}></EditCalendar>
         </>
     );
