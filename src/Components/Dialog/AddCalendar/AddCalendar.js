@@ -33,7 +33,7 @@ const AddCalendar = (props) => {
         const data = new FormData(event.currentTarget);
         axios.post('api/scheduler/calendars/',
             {
-                'owner': [userInfo['email']],
+                'owner': userInfo['email'],
                 'title': data.get('Calendar'),
                 'description': data.get('Description'),
                 'members': data.get('Members').split(';'),

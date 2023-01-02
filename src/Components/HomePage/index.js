@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,forceUpdate } from 'react';
 import Sidebar from '../Sidebar';
 import Calendar from '../Calendar';
 import AddCalendar from '../Dialog/AddCalendar/AddCalendar';
@@ -37,8 +37,8 @@ function HomePage(props) {
     const getCalendarsAsync = async () => {
         try {
             const res = await axios.get('api/scheduler/calendars/', { headers: headers });
-            await setCalendars(res.data);
-            await mySetView('all');
+            setCalendars(res.data);
+            mySetView('all');
         }
         catch (err) {
             console.log('Failed  api/scheduler/calendars/');
@@ -47,7 +47,7 @@ function HomePage(props) {
     const getEventsAsync = async (id) => {
         try {
             const res = await axios.get('api/scheduler/tasks/?calendar=' + id, { headers: headers });
-            await setEvents(res.data);
+            setEvents(res.data);
         }
         catch (err) {
             console.log('Failed api/scheduler/tasks/?calendar=');
@@ -104,7 +104,7 @@ function HomePage(props) {
             });
     }
 
-    const editTask = (event) => {
+    const editTask = async (event) => {
         const [taskId, calendarId] = event['event_id'].split(' ');
         axios.put('api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId, {
             'title': event['title'],

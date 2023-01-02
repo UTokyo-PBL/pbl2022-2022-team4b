@@ -34,7 +34,7 @@ const EditCalendar = (props) => {
         const data = new FormData(event.currentTarget);
         axios.put('api/scheduler/calendars/'+ calendarInfo['id'] +'/',
             {
-                'owner': [userInfo['email']],
+                'owner': userInfo['email'],
                 'title': data.get('Calendar'),
                 'description': data.get('Description'),
                 'members': data.get('Members').split(';'),
@@ -80,7 +80,7 @@ const EditCalendar = (props) => {
                             name="Members"
                             label="Members"
                             autoComplete="Members"
-                            defaultValue= {calendarInfo['members']}
+                            defaultValue= {calendarInfo['members'].join(';')}
                         />
                         <TextField
                             margin="normal"
@@ -88,7 +88,7 @@ const EditCalendar = (props) => {
                             name="Guests"
                             label="Guests"
                             autoComplete="Guests"
-                            defaultValue= {calendarInfo['guests']}
+                            defaultValue= {calendarInfo['guests'].join(';')}
                         />
                         <Button
                             startIcon={<UpgradeIcon />}
