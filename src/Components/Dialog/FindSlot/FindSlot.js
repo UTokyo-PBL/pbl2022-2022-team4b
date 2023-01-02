@@ -20,7 +20,53 @@ import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
 import axios from 'axios'
 axios.defaults.baseURL = "http://localhost:8080";
-
+const datas =[
+    [
+      "2022-12-10T11:30:00Z",
+      "0.0",
+      0
+    ],
+    [
+      "2022-12-10T12:30:00Z",
+      "0.0",
+      0
+    ],
+    [
+      "2022-12-10T13:30:00Z",
+      "0.0",
+      0
+    ],
+    [
+      "2022-12-10T14:30:00Z",
+      "0.0",
+      0
+    ],
+    [
+      "2022-12-10T15:30:00Z",
+      "0.0",
+      0
+    ],
+    [
+      "2022-12-10T16:30:00Z",
+      "0.0",
+      0
+    ],
+    [
+      "2022-12-10T17:30:00Z",
+      "0.0",
+      0
+    ],
+    [
+      "2022-12-10T18:00:00Z",
+      "0.0",
+      0
+    ],
+    [
+      "2022-12-10T07:30:00Z",
+      "5400.0",
+      3
+    ]
+  ]
 const FindSlot = (props) => {
     const theme = createTheme();
     const token = useLocation()['state'];
@@ -38,23 +84,31 @@ const FindSlot = (props) => {
     const [duration, setDuration] = useState(new Date());
     const handleDurationChange = (newValue) => {setDuration(newValue);};
     useEffect(() => {
-        PubSub.subscribe('findSlotDialog', (_, data) => {setOpen(data)});
+        PubSub.subscribe('findSlotDialog', (_, data) => {setOpen(data);
+            console.log("received")});
         PubSub.subscribe('selectedCalendarInfo', (_, data) => {setCalendarInfo(data)});
         PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
     }, [])
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // axios.post('api/scheduler/calendars/', 
-        //     {   'owner': [userInfo['email']],
-        //         'title': data.get('Calendar'),
-        //         'description': data.get('Description'),
-        //         'members': [data.get('Members')],
-        //         'guests': [data.get('Guests')]},
-        //     {headers: headers},
-        // ).then(res => {
-            console.log(startTime,endTime,duration);
-            PubSub.publish('findSlotDialog', false);
+        const data = new FormData(event.currentTarget);
+        console.log('start');
+    //     axios.post('api/scheduler/calendars/', 
+    //         {   'start_time': data.startTime,
+    //             'end_time': data.endTime,
+    //             'duration': data.duration,
+    //             'start_index': 0,
+    //             'end_index': 9
+    // },
+    //         {headers: headers},
+    //     ).then(res => {
+            PubSub.publish('chooseSlotDialog', true);
+            PubSub.publish('chooseSlotDialogData', {'startTime':startTime,'endTime':endTime,'duration':duration});
+            // PubSub.publish('findSlotDialogData', res.data);
+            PubSub.publish('findSlotDialogData', datas);
+            // setTimeout(()=>PubSub.publish('findSlotDialog', false),1000);
+            console.log('Out');
         // }).catch(err => {
         //     console.log('Fail api/scheduler/calendars/');
         // });

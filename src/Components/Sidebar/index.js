@@ -35,7 +35,7 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 function Sidebar(props) {
     const colors = ['CornflowerBlue','Coral','LightCoral','HotPink','Thistle','Grey','MediumAquaMarine','DarkOrange'];
     const [selectedCalendarInfo,setSelectedCalendarInfo] = useState({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]});
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(true);
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {return;}
         setDrawerOpen(open);

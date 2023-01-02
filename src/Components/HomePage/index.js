@@ -5,6 +5,7 @@ import AddCalendar from '../Dialog/AddCalendar/AddCalendar';
 import EditCalendar from '../Dialog/EditCalendar/EditCalendar';
 import FindSlot from '../Dialog/FindSlot/FindSlot';
 import DelCalendar from '../Dialog/DelCalendar/DelCalendar';
+import ChooseSlot from '../Dialog/ChooseSlot/ChooseSlot';
 import { useLocation } from "react-router-dom";
 import axios from 'axios'
 import PubSub from 'pubsub-js'
@@ -134,6 +135,7 @@ function HomePage(props) {
             <Sidebar calendars={calendars} mySetView={mySetView} />
             <Calendar events={events} addTask={addTask} delTask={delTask} editTask={editTask} dropTask={dropTask}/>
             <AddCalendar getCalendarsAsync={getCalendarsAsync}></AddCalendar>
+            <ChooseSlot addTask={addTask}></ChooseSlot>
             <FindSlot ></FindSlot>
             <DelCalendar delCalendar={delCalendar}></DelCalendar>
             <JoinCalendar></JoinCalendar>
