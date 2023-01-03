@@ -10,7 +10,7 @@ import axios from 'axios'
 import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
 import JoinCalendar from '../Dialog/JoinCalendar/JoinCalendar';
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = "http://localhost";
 
 // A little bug,view在里面又问题
 var view = 'all';

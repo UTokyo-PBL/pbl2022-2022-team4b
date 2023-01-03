@@ -11,7 +11,7 @@ import axios from 'axios'
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
 import AddIcon from '@mui/icons-material/Add';
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = "http://localhost";
 
 const AddCalendar = (props) => {
     const [userInfo,setUserInfo] = useState({});

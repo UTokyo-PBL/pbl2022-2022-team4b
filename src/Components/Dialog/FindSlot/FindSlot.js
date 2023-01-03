@@ -19,7 +19,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
 import axios from 'axios'
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = "http://localhost";
 
 const FindSlot = (props) => {
     const theme = createTheme();

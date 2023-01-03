@@ -14,7 +14,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
 import  axios from 'axios'
-axios.defaults.baseURL = "http://localhost:8080";
+// axios.defaults.baseURL = "http://34.146.199.221";
+axios.defaults.baseURL = "http://localhost";
 
 function Copyright(props) {
   return (
@@ -41,13 +42,12 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
     });
-
     axios.post('api/account/register/',{
       username: data.get('email'),
       first_name: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
-      })
+      },{headers:{'Access-Control-Allow-Origin': '*'}})
       .then(res => {
         navigate('/login');
     }).catch(err => {

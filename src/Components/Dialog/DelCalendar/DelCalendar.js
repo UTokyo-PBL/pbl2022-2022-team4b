@@ -19,7 +19,7 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
 import axios from 'axios'
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = "http://localhost";
 
 const DelCalendar = (props) => {
     const [open, setOpen] = useState(false);

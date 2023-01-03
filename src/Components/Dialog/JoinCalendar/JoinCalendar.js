@@ -11,7 +11,7 @@ import axios from 'axios'
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
-axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = "http://localhost";
 
 const JoinCalendar = (props) => {
     const theme = createTheme();
