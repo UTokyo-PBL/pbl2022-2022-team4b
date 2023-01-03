@@ -11,7 +11,6 @@ import axios from 'axios'
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
-axios.defaults.baseURL = "http://localhost";
 
 const EditCalendar = (props) => {
     const theme = createTheme();
@@ -32,7 +31,7 @@ const EditCalendar = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        axios.put('api/scheduler/calendars/'+ calendarInfo['id'] +'/',
+        axios.put('http://34.146.199.221/api/scheduler/calendars/'+ calendarInfo['id'] +'/',
             {
                 'owner': userInfo['email'],
                 'title': data.get('Calendar'),

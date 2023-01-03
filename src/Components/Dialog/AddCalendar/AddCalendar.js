@@ -11,7 +11,7 @@ import axios from 'axios'
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
 import AddIcon from '@mui/icons-material/Add';
-axios.defaults.baseURL = "http://localhost";
+// axios.defaults.baseURL = "http://localhost";
 
 const AddCalendar = (props) => {
     const [userInfo,setUserInfo] = useState({});
@@ -31,7 +31,7 @@ const AddCalendar = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        axios.post('api/scheduler/calendars/',
+        axios.post('http://34.146.199.221/api/scheduler/calendars/',
             {
                 'owner': userInfo['email'],
                 'title': data.get('Calendar'),

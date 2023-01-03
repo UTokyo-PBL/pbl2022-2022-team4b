@@ -15,7 +15,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
 import  axios from 'axios'
 // axios.defaults.baseURL = "http://34.146.199.221";
-axios.defaults.baseURL = "http://localhost";
 
 function Copyright(props) {
   return (
@@ -42,7 +41,7 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
     });
-    axios.post('api/account/register/',{
+    axios.post('http://34.146.199.221/api/account/register/',{
       username: data.get('email'),
       first_name: data.get('name'),
       email: data.get('email'),

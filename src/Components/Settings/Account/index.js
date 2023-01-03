@@ -17,7 +17,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 
-axios.defaults.baseURL = "http://localhost";
+// axios.defaults.baseURL = "http://localhost";
 
 export default function Account() {
 
@@ -36,7 +36,7 @@ export default function Account() {
 
     const getUserInfo = async () => {
         try {
-            const res = await axios.get('api/account/user/', { headers: headers });
+            const res = await axios.get('http://34.146.199.221/api/account/user/', { headers: headers });
             setUserInfo(res.data)
             console.log(res.data)
         }

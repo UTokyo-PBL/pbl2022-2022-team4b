@@ -19,8 +19,6 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
 import axios from 'axios'
-axios.defaults.baseURL = "http://localhost";
-
 const FindSlot = (props) => {
     const theme = createTheme();
     const token = useLocation()['state'];
@@ -45,7 +43,7 @@ const FindSlot = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // axios.post('api/scheduler/calendars/', 
+        // axios.post('http://34.146.199.221/api/scheduler/calendars/', 
         //     {   'owner': [userInfo['email']],
         //         'title': data.get('Calendar'),
         //         'description': data.get('Description'),

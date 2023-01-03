@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Scheduler } from "@aldabil/react-scheduler";
 import Toolbar from '@mui/material/Toolbar';
 import axios from 'axios'
-axios.defaults.baseURL = "http://localhost";
+// axios.defaults.baseURL = "http://localhost";
 
 const drawerWidth = 240;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(

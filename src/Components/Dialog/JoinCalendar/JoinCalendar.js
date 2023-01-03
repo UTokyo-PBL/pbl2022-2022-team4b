@@ -11,7 +11,6 @@ import axios from 'axios'
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import Typography from '@mui/material/Typography';
 import Dialog from '@mui/material/Dialog';
-axios.defaults.baseURL = "http://localhost";
 
 const JoinCalendar = (props) => {
     const theme = createTheme();
@@ -26,7 +25,7 @@ const JoinCalendar = (props) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log('api/scheduler/invitecode/' + data.get('CalendarID') + '/add/');
-        axios.put('api/scheduler/invitecode/' + data.get('CalendarID') + '/add/', 
+        axios.put('http://34.146.199.221/api/scheduler/invitecode/' + data.get('CalendarID') + '/add/', 
             {'invite_code': data.get('InviteCode')},
             {headers: headers},
         ).then(res => {

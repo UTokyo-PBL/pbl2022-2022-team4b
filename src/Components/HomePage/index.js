@@ -10,7 +10,7 @@ import axios from 'axios'
 import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
 import JoinCalendar from '../Dialog/JoinCalendar/JoinCalendar';
-axios.defaults.baseURL = "http://localhost";
+// axios.defaults.baseURL = "http://localhost";
 
 // A little bug,view在里面又问题
 var view = 'all';
@@ -25,9 +25,8 @@ function HomePage(props) {
     const [events, setEvents] = useState([]);
     const getInviteCode = async (id)=>{
         try {
-            const res = await axios.get('api/scheduler/invitecode/' + id + '/',{headers: headers});
+            const res = await axios.get('http://34.146.199.221/api/scheduler/invitecode/' + id + '/',{headers: headers});
             setInviteCode(res.data['invite_code']);
-            console.log(res.data);
             await PubSub.publish('inviteCode',inviteCode);
         }
         catch (err) {
@@ -36,7 +35,7 @@ function HomePage(props) {
     }
     const getCalendarsAsync = async () => {
         try {
-            const res = await axios.get('api/scheduler/calendars/', { headers: headers });
+            const res = await axios.get('http://34.146.199.221/api/scheduler/calendars/', { headers: headers });
             setCalendars(res.data);
             mySetView('all');
         }
@@ -46,7 +45,7 @@ function HomePage(props) {
     }
     const getEventsAsync = async (id) => {
         try {
-            const res = await axios.get('api/scheduler/tasks/?calendar=' + id, { headers: headers });
+            const res = await axios.get('http://34.146.199.221/api/scheduler/tasks/?calendar=' + id, { headers: headers });
             setEvents(res.data);
         }
         catch (err) {
@@ -62,7 +61,7 @@ function HomePage(props) {
     }
     const getUserInfo = async ()=>{
         try {
-            const res = await axios.get('api/account/user/',{headers: headers});
+            const res = await axios.get('http://34.146.199.221/api/account/user/',{headers: headers});
             await PubSub.publish('userInfo',res.data);
             await PubSub.publish('token', token)
         }
@@ -76,7 +75,7 @@ function HomePage(props) {
         getUserInfo();
     }, [])
     const addTask = (event) => {
-        axios.post('api/scheduler/tasks/', {
+        axios.post('http://34.146.199.221/api/scheduler/tasks/', {
             'title': event['title'],
             'description': '',
             'calendar': view,
@@ -95,7 +94,7 @@ function HomePage(props) {
 
     const delTask = (id) => {
         const [taskId, calendarId] = id.split(' ');
-        axios.delete('api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId,
+        axios.delete('http://34.146.199.221/api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId,
             { headers: headers })
             .then(res => {
                 getEventsAsync(view);
@@ -106,7 +105,7 @@ function HomePage(props) {
 
     const editTask = async (event) => {
         const [taskId, calendarId] = event['event_id'].split(' ');
-        axios.put('api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId, {
+        axios.put('http://34.146.199.221/api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId, {
             'title': event['title'],
             'description': '',
             'calendar': calendarId,
@@ -121,7 +120,7 @@ function HomePage(props) {
     }
     const dropTask = (droppedOn, updatedEvent) => {
         const [taskId, calendarId] = updatedEvent['event_id'].split(' ');
-        axios.put('api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId, {
+        axios.put('http://34.146.199.221/api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId, {
             'title': updatedEvent['title'],
             'description': '',
             'calendar': calendarId,
@@ -136,7 +135,7 @@ function HomePage(props) {
     }
 
     const delCalendar = (id) => {
-        axios.delete('api/scheduler/calendars/' + id + '/',
+        axios.delete('http://34.146.199.221/api/scheduler/calendars/' + id + '/',
             { headers: headers })
             .then(res => {
                 if (id == view) mySetView('all');
