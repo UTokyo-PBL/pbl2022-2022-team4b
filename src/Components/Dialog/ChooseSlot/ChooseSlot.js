@@ -25,96 +25,57 @@ axios.defaults.baseURL = "http://localhost:8080";
 
 const ChooseSlot = (props) => {
     const theme = createTheme();
-    const token = useLocation()['state'];
-    const [userInfo,setUserInfo] = useState({});
-    const [value, setValue] = React.useState('');
-    const headers = {
-        'X-CSRFToken': Cookies.get('csrftoken'),
-        'authorization': 'Token ' + token,};
-    const [calendarInfo, setCalendarInfo] = useState({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]});
-    const [freeslot, setfreeslot] = useState([]);
     const [open, setOpen] = useState(false);
-    const handleClose = () => { setOpen(false)}
-    const [startTime, setStartTime] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date());
-    const [duration, setDuration] = useState(new Date());
-    const [events, setEvents] = useState([]);
+    const handleClose = () => { setOpen(false)};
+    const [value, setValue] = useState('');
+    const [calendarInfo, setCalendarInfo] = useState({id:'all',title:'all',description:'all calendars',owner:'',members:[],guests:[]});
+    const [Target, setTarget] = useState({});
+    const [freeslot, setFreeslot] = useState([])
     useEffect(() => {
-        PubSub.subscribe('chooseSlotDialog', (_, data) => {
-            setOpen(data);
-            console.log("received")});
-        PubSub.subscribe('chooseSlotDialogData', (_, data) => {
-            setStartTime(data.startTime);
-            setEndTime(data.endTime);
-            setDuration(data.duration);
-                console.log("received1")});
+        PubSub.subscribe('chooseSlotDialog', (_, data) => {setOpen(data)});
+        
+        PubSub.subscribe('findSlotDialogData', (_, data) =>{setFreeslot(data);console.log('Freeslot:'+freeslot)});
         PubSub.subscribe('selectedCalendarInfo', (_, data) => {setCalendarInfo(data)});
-        PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
-        PubSub.subscribe('findSlotDialogData', (_, data) => {setfreeslot([data])});
-    }, []);
-
-
-    const handleEdit = () => {
-        setOpen(false)
-        PubSub.publish('findSlotDialog', true)}
-
+        PubSub.subscribe('chooseSlotDialogData', (_, data) => {setTarget(data)} );
+    }, [])
+    const todate= (iso_string)  => {
+        const Start_time = new Date(iso_string)
+        return Start_time.getFullYear()+'-'+ (Start_time.getMonth() + 1)+ '-' + Start_time.getDate()+
+        '  ' + Start_time.getHours() +
+        ':' + Start_time.getMinutes()
+    };
     const handleRadioChange = (event) => {
-        setValue((event.target).value); 
-        };
-    const getEventsAsync = async (id) => {
-            try {
-                const res = await axios.get('api/scheduler/tasks/?calendar=' + id, { headers: headers });
-                await setEvents(res.data);
-            }
-            catch (err) {
-                console.log('Failed api/scheduler/tasks/?calendar=');
-            };
-        }
-    const addTask = (event) => {
-        const endtime = new Date(value);
-        endtime.setMinutes(endTime.getMinutes()+duration);
-            axios.post('api/scheduler/tasks/', {
-                'title': event.currentTarget.get('Title'),
-                'description': '',
-                'calendar': 'all',
-                'start_time': new Date(value),//start_time
-                'end_time': endtime
-            },
-                {
-                    headers: headers
-                }).then(res => {
-                    // getEventsAsync('all');
-                }).catch(err => {
-                    console.log('Failed api/scheduler/calendars/');
-                });
-            console.log('create')
-        }
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     axios.post('api/scheduler/tasks/', {
-    //         'title': event['title'],
-    //         'description': '',
-    //         'calendar': 'all',
-    //         'start_time': event['start'],
-    //         'end_time': event['end']
-    //     },
-    //     {
-    //         headers: headers
-    //     }).then(res => {
-    //         console.log('submitted1');
-    //         console.log('Published1');
-    //         setTimeout(()=>PubSub.publish('chooseSlotDialog', false),1000);
-    //         console.log('Out1');
-    //     }).catch(err => {
-    //         console.log('Fail api/scheduler/calendars/');
-    //     });
-    // };
-    const Slots = freeslot.map((item) => {
-       return <FormControlLabel value={item[0]} control={<Radio />} label={`Start from ${item[0]} with ${item[2]} conflicts`} />
-    })
-    ;
+        setValue(event.target.value);
+      };
+    const Slots = freeslot.map((item,i) => {
+        console.log('logging'+item);
+        return <FormControlLabel key={item[0]} value={item[0]} control={<Radio />} label={`Start from ${todate(item[0])} with ${item[2]} conflicts`} />
+     })
 
-
+     const handleSubmit = (event) =>{
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        console.log(data);
+        const start_time = new Date(value)
+        var end_time =  new Date(value)
+        end_time.setMinutes(end_time.getMinutes()+parseInt(Target.duration));
+        console.log(end_time)
+        console.log({
+            'title': data.get('Title'),
+            'description': '',
+            'calendar': calendarInfo['id'],
+            'start_time':start_time,
+            'end_time':  end_time
+        })
+        props.addTask({
+            'title': data.get('Title'),
+            'description': '',
+            'calendar': calendarInfo['id'],
+            'start': value ,
+            'end':  end_time
+        })
+        setOpen(false);
+     };
     return (
         <Dialog onClose={handleClose} open={open}>
         <ThemeProvider theme={theme}>
@@ -122,77 +83,48 @@ const ChooseSlot = (props) => {
                 <Typography sx={{mb:3,height: '40px',paddingTop: '15px',textAlign: 'center',fontSize: '20px'}} variant="h6" component="div">
                 Found slot in  :  {calendarInfo['title']}
                 </Typography>
-                <Box component="form" onSubmit={handleEdit} noValidate sx={{ mt: 1 , width : '100%'}}>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , width : '100%'}}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <Stack spacing={3}>
-                            <TimePicker
-                            ampm={false}
+                        <TextField
+                            margin="normal"
+                            required
                             disabled
-                            openTo="hours"
-                            views={['hours', 'minutes']}
-                            inputFormat="HH:mm"
-                            mask="__:__"
-                            label="Duration"
-                            value={duration}
-                            renderInput={(params) => <TextField {...params} />}
-                            />
-                            <DateTimePicker
-                            disabled
-                            label="From"
-                            name = "startTime"
-                            value={startTime}
-                            renderInput={(params) => <TextField {...params} />}
-                            />
-                            <DateTimePicker
-                            disabled
-                            label="To"
-                            name = "endTime"
-                            value={endTime}
-                            renderInput={(params) => <TextField {...params} />}
-                            />
+                            fullWidth
+                            id="Duration"
+                            label={Target.duration}
+                            name="Duration"
+                            autoComplete="Duration"
+                            autoFocus
+                        />
                         </Stack>
-                        <Button
-                        startIcon={<SearchIcon/>}
-                        type="submit"
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                        >
-                        Edit
-                        </Button>
-                        
-                    </LocalizationProvider>
-                </Box>
-                <Box component="form" onSubmit={addTask} noValidate sx={{ mt: 1 , width : '100%'}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <Stack spacing={3}>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
                             id="Title"
-                            label="Event Title"
+                            label="Title of Tasks"
                             name="Title"
-                            autoComplete="Title"
+                            autoComplete="Unnamed Task"
                             autoFocus
                         />
                         <RadioGroup
                         aria-labelledby="demo-error-radios"
-                        name="Availble slot"
+                        name="quiz"
                         value={value}
                         onChange={handleRadioChange}
-                        >
-                        {Slots}
+                        >{Slots}
                         </RadioGroup>
-                        <Button
-                        startIcon={<SearchIcon/>}
+                        
+                    </LocalizationProvider>
+                   
+                    <Button
                         type="submit"
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
-                        >
-                        Confirm and submit!
-                        </Button>
-                        </Stack>
-                    </LocalizationProvider>
+                    >
+                        Add Task
+                    </Button>
                 </Box>
             </Container>
         </ThemeProvider>
