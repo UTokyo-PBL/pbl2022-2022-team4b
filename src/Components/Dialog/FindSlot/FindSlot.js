@@ -38,34 +38,54 @@ const FindSlot = (props) => {
     const [duration, setDuration] = useState(new Date());
     const handleDurationChange = (newValue) => {setDuration(newValue);};
     useEffect(() => {
-        PubSub.subscribe('findSlotDialog', (_, data) => {setOpen(data);
-            console.log("received")});
+        PubSub.subscribe('findSlotDialog', (_, data) => {setOpen(data)});
         PubSub.subscribe('selectedCalendarInfo', (_, data) => {setCalendarInfo(data)});
         PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
     }, [])
-
+    const toIsoString= (date)  => {
+        var tzo = -date.getTimezoneOffset(),
+            dif = tzo >= 0 ? '+' : '-',
+            pad = function(num) {
+                return (num < 10 ? '0' : '') + num;
+            };
+      
+        return date.getFullYear() +
+            '-' + pad(date.getMonth() + 1) +
+            '-' + pad(date.getDate()) +
+            'T' + pad(date.getHours()) +
+            ':' + pad(date.getMinutes()) +
+            ':' + pad(date.getSeconds()) +
+            dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+            ':' + pad(Math.abs(tzo) % 60);
+      }
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log('start');
+
+        console.log({'start_time':toIsoString(startTime) ,
+        'end_time':toIsoString(endTime) ,
+        'duration': parseInt(data.get('Duration')),
+        'start_index': 0,
+        'end_index': 9});
+
         axios.post('api/scheduler/findslot/', 
-            {   'start_time': data.startTime,
-                'end_time': data.endTime,
-                'duration': data.duration,
+            {   'start_time':toIsoString(startTime) ,
+                'end_time':toIsoString(endTime) ,
+                'duration': data.get('Duration'),
                 'start_index': 0,
                 'end_index': 9
     },
             {headers: headers},
         ).then(res => {
             PubSub.publish('chooseSlotDialog', true);
-            PubSub.publish('chooseSlotDialogData', {'startTime':startTime,'endTime':endTime,'duration':duration});
+            PubSub.publish('chooseSlotDialogData', {'startTime':startTime,'endTime':endTime,'duration':data.get('Duration')});
             // PubSub.publish('findSlotDialogData', res.data);
             PubSub.publish('findSlotDialogData', res.data);
             // setTimeout(()=>PubSub.publish('findSlotDialog', false),1000);
-            console.log('Out');
         }).catch(err => {
             console.log('Fail api/scheduler/findslot/');
         });
+        setOpen(false);
     };
 
 
@@ -79,18 +99,18 @@ const FindSlot = (props) => {
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , width : '100%'}}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <Stack spacing={3}>
-                            <TimePicker
-                            ampm={false}
-                            openTo="hours"
-                            views={['hours', 'minutes']}
-                            inputFormat="HH:mm"
-                            mask="__:__"
-                            label="Duration"
-                            value={duration}
-                            onChange={handleDurationChange}
-                            renderInput={(params) => <TextField {...params} />}
-                            />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="Duration"
+                            label="Duration in minutes"
+                            name="Duration"
+                            autoComplete="Duration"
+                            autoFocus
+                        />
                             <DateTimePicker
+                            id="startTime"
                             label="From"
                             name = "startTime"
                             value={startTime}
@@ -98,6 +118,7 @@ const FindSlot = (props) => {
                             renderInput={(params) => <TextField {...params} />}
                             />
                             <DateTimePicker
+                            id="endTime"
                             label="To"
                             name = "endTime"
                             value={endTime}
