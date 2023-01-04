@@ -50,7 +50,7 @@ const ChooseSlot = (props) => {
                 console.log("received1")});
         PubSub.subscribe('selectedCalendarInfo', (_, data) => {setCalendarInfo(data)});
         PubSub.subscribe('userInfo', (_, data) => {setUserInfo(data)});
-        PubSub.subscribe('findSlotDialogData', (_, data) => {setfreeslot(data)});
+        PubSub.subscribe('findSlotDialogData', (_, data) => {setfreeslot([data])});
     }, []);
 
 
@@ -83,7 +83,7 @@ const ChooseSlot = (props) => {
                 {
                     headers: headers
                 }).then(res => {
-                    getEventsAsync('all');
+                    // getEventsAsync('all');
                 }).catch(err => {
                     console.log('Failed api/scheduler/calendars/');
                 });
