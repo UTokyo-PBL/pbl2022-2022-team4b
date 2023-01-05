@@ -24,7 +24,7 @@ const ChooseSlot = (props) => {
     const [freeslot, setFreeslot] = useState([])
     useEffect(() => {
         PubSub.subscribe('chooseSlotDialog', (_, data) => {setOpen(data)});
-        PubSub.subscribe('findSlotDialogData', (_, data) =>{setFreeslot(data);console.log('Freeslot:'+freeslot)});
+        PubSub.subscribe('findSlotDialogData', (_, data) =>{setFreeslot(data);});
         PubSub.subscribe('selectedCalendarInfo', (_, data) => {setCalendarInfo(data)});
         PubSub.subscribe('chooseSlotDialogData', (_, data) => {setTarget(data)} );
     }, [])

@@ -61,9 +61,11 @@ const FindSlot = (props) => {
     },
             {headers: headers},
         ).then(res => {
+            if(res.data instanceof Array ){
             PubSub.publish('chooseSlotDialog', true);
             PubSub.publish('chooseSlotDialogData', {'startTime':startTime,'endTime':endTime,'duration':data.get('Duration')});
             PubSub.publish('findSlotDialogData', res.data);
+            }
         }).catch(err => {
             console.log('Fail api/scheduler/findslot/');
         });
