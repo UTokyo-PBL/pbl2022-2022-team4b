@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 from .serializers import CalendarSerializer, TaskSerializer, InviteCodeSerializer
 from .models import Calendar, Task
-from .calendarTaskUtils import get_tasks, get_all_calendars
+from .calendarTaskUtils import get_tasks, get_all_calendars, get_all_calendars_of_all_users, get_calendar_members
 from rest_framework.response import Response
 
 from .find_free_slot import allocate_free_slot
@@ -81,12 +81,16 @@ class FindSlotAPI(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             req_dict:dict = dict(request.data)
+            calendar_id = int(req_dict['calendar_id'])
             duration = datetime.timedelta(minutes=int(req_dict['duration']))
             start_time = datetime.datetime.fromisoformat(req_dict["start_time"])
             end_time = datetime.datetime.fromisoformat(req_dict["end_time"])
             start_index = int(req_dict.get('start_index'))
             end_index = int(req_dict.get('end_index'))
-            calendar_list = get_all_calendars(self.request.user)
+            users = get_calendar_members(Calendar.objects.get(id=calendar_id))
+            if self.request.user not in users:
+                return Response([])
+            calendar_list = get_all_calendars_of_all_users(users)
             tasks = Task.objects.filter(calendar__in=calendar_list).filter(start_time__range=(start_time,end_time))
             task_list = [(t.start_time, t.end_time) for t in tasks]
             candidate_list:list = allocate_free_slot(duration, task_list, task_span=(start_time, end_time))

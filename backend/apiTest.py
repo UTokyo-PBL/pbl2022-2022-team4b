@@ -47,6 +47,7 @@ new_task = {
     'end_time': get_time(2022,12,10,11,30).isoformat(),
 }
 find_slot = {
+    'calendar_id': 0,  # this will be updated later when we create the new calendar
     'start_time': get_time(2022,12,10).isoformat(),
     'end_time': get_time(2022,12,11).isoformat(),
     'duration': 180,
@@ -83,6 +84,7 @@ response = requests.post('http://localhost:8000/api/scheduler/calendars/', heade
 print_resp(response)
 
 calendar_id = response.json()['id']
+find_slot['calendar_id'] = calendar_id
 
 print("\n### (GET)calendar info ###\n")
 response = requests.get('http://localhost:8000/api/scheduler/calendars/', headers=headers)
@@ -91,7 +93,7 @@ print_resp(response)
 print("\n### (UPDATE)calendar update ###\n")
 new_new_calendar = new_calendar.copy()
 new_new_calendar['description'] = 'updated test calendar 111'
-new_new_calendar['members'] = ['user3@test.com']
+new_new_calendar['members'] = ['user2@test.com']
 response = requests.put(f"http://localhost:8000/api/scheduler/calendars/{calendar_id}/", headers=headers, json=new_new_calendar)
 print_resp(response)
 
