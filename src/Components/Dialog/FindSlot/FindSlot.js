@@ -57,7 +57,8 @@ const FindSlot = (props) => {
                 'end_time':toIsoString(endTime) ,
                 'duration': data.get('Duration'),
                 'start_index': 0,
-                'end_index': 9
+                'end_index': 9,
+                'calendar_id':calendarInfo['id']
     },
             {headers: headers},
         ).then(res => {
