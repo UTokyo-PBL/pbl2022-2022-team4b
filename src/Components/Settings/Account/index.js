@@ -1,29 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Outlet } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
 import axios from 'axios'
 import OutlinedInput from '@mui/material/OutlinedInput';
-import FormControl, { useFormControl } from '@mui/material/FormControl';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-
-// axios.defaults.baseURL = "http://localhost";
+import FormControl from '@mui/material/FormControl';
 
 export default function Account() {
 
     const [userInfo, setUserInfo] = useState({})
     const [isChanging, setIsChanging] = useState({ 'name': false, 'email:': false, 'password':false })
-    const [calendars, _] = useState([]);
 
     const token = useLocation()['state']
 

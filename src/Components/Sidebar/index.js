@@ -22,7 +22,6 @@ import AddIcon from '@mui/icons-material/Add';
 import Avatar from '@mui/material/Avatar';
 import PubSub from 'pubsub-js'
 import { useNavigate } from 'react-router-dom';
-// import Dialog from '@mui/material/Dialog';
 
 export const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -44,11 +43,13 @@ function Sidebar(props) {
         PubSub.publish('drawerOpen', drawerOpen);
     };
     const joinCalendar = () => { PubSub.publish('joinCalendarDialog', true); }
-    const calendarShow = () => { PubSub.publish('delCalendarDialog', true); }
+    const calendarShow = () => {if(selectedCalendarInfo['id'] !== 'all'){PubSub.publish('delCalendarDialog', true); }}
     const addNewCalendar = () => { PubSub.publish('newCalendarDialog', true); }
     const findSlot = () => {
-        PubSub.publish('selectedCalendarInfo', selectedCalendarInfo);
-        PubSub.publish('findSlotDialog', true);
+        if(selectedCalendarInfo['id'] !== 'all'){
+            PubSub.publish('selectedCalendarInfo', selectedCalendarInfo);
+            PubSub.publish('findSlotDialog', true);
+        }
     }
     
     const calendarSelected = (item) => {

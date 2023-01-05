@@ -1,4 +1,4 @@
-import React, { useState, useEffect,forceUpdate } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../Sidebar';
 import Calendar from '../Calendar';
 import AddCalendar from '../Dialog/AddCalendar/AddCalendar';
@@ -10,7 +10,7 @@ import axios from 'axios'
 import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
 import JoinCalendar from '../Dialog/JoinCalendar/JoinCalendar';
-// axios.defaults.baseURL = "http://localhost";
+import ChooseSlot from '../Dialog/ChooseSlot/ChooseSlot';
 
 // A little bug,view在里面又问题
 var view = 'all';
@@ -151,6 +151,7 @@ function HomePage(props) {
             <Calendar events={events} addTask={addTask} delTask={delTask} editTask={editTask} dropTask={dropTask}/>
             <AddCalendar getCalendarsAsync={getCalendarsAsync}></AddCalendar>
             <FindSlot ></FindSlot>
+            <ChooseSlot addTask={addTask}></ChooseSlot>
             <DelCalendar delCalendar={delCalendar}></DelCalendar>
             <JoinCalendar getCalendarsAsync={getCalendarsAsync}></JoinCalendar>
             <EditCalendar getCalendarsAsync={getCalendarsAsync}></EditCalendar>
