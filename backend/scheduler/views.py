@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.db.models import Q
 import datetime
 from rest_framework import viewsets, permissions, mixins, generics
 from rest_framework.decorators import action
@@ -91,7 +91,9 @@ class FindSlotAPI(generics.GenericAPIView):
             if self.request.user not in users:
                 return Response([])
             calendar_list = get_all_calendars_of_all_users(users)
-            tasks = Task.objects.filter(calendar__in=calendar_list).filter(start_time__range=(start_time,end_time))
+            # tasks = Task.objects.filter(calendar__in=calendar_list).filter(start_time__range=(start_time,end_time))
+            tasks = Task.objects.filter(Q(calendar__in=calendar_list), 
+                Q(start_time__range=(start_time,end_time)) | Q(end_time__range=(start_time,end_time)))
             task_list = [(t.start_time, t.end_time) for t in tasks]
             candidate_list:list = allocate_free_slot(duration, task_list, task_span=(start_time, end_time))
             # candidate_list: a list of tuple [(best_start_time_for_task, total_conflict_time, total_conflict_member)...]
