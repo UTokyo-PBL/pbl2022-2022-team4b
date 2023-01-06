@@ -1,3 +1,5 @@
-# pbl2022-2022-team4b
+# Front-end part
 
-This repo is used for team4b of course cloud development practice project. Our project is about design a web schedule APP which enables some advanced functions to make it more friendly for teamwork and group management.
+We design and develop our application frontend with React, and communicate with the backend using the RESTful APIs provided by the backend.
+
+> TODO: This README needs more details about the code structure and idea about the frontend part.

@@ -1,85 +1,146 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../Sidebar';
 import Calendar from '../Calendar';
-import PopUp from '../PopUp'
-import { useLocation  } from "react-router-dom";
+import AddCalendar from '../Dialog/AddCalendar/AddCalendar';
+import EditCalendar from '../Dialog/EditCalendar/EditCalendar';
+import FindSlot from '../Dialog/FindSlot/FindSlot';
+import DelCalendar from '../Dialog/DelCalendar/DelCalendar';
+import ChooseSlot from '../Dialog/ChooseSlot/ChooseSlot';
+import { useLocation } from "react-router-dom";
 import axios from 'axios'
+import PubSub from 'pubsub-js'
 import Cookies from 'js-cookie';
+import JoinCalendar from '../Dialog/JoinCalendar/JoinCalendar';
 axios.defaults.baseURL = "http://localhost:8080";
 
+// A little bug,view在里面又问题
+var view = 'all';
 function HomePage(props) {
     const token = useLocation()['state']
     const headers = {
         'X-CSRFToken': Cookies.get('csrftoken'),
         'authorization': 'Token ' + token,
     };
-    const [calendars, setCalendars] = useState();
-    const [view, setView] = useState('all');
-    const [events,setEvents] = useState([
-        {
-            event_id: 1,
-            title: "Event 1",
-            start: new Date("2022/12/2 09:30"),
-            end: new Date("2022/12/2 10:30"),
+    const [calendars, setCalendars] = useState([]);
+    const [events, setEvents] = useState([]);
+    const getCalendarsAsync = async () => {
+        try {
+            const res = await axios.get('api/scheduler/calendars/', { headers: headers });
+            await setCalendars(res.data);
         }
-    ]);
-    const [eventsTest,setEventsTest] = useState([
-        {
-            event_id: 1,
-            title: "Event 1",
-            start: new Date("2022/12/2 09:30"),
-            end: new Date("2022/12/2 10:30"),
-        }
-    ]);
-
-    const newEvent = {
-        'title': "task111",
-        'description': "test task 111",
-        'calendar': 0,
-        'start_time': '2022-12-10 11:30:00+00:00',
-        'end_time': '2022-12-10 13:30:00+00:00',
+        catch (err) {
+            console.log('Failed  api/scheduler/calendars/');
+        };
     }
-    // axios.get('api/scheduler/calendars/tasks/?calendar=' + view,{headers:headers})
-    //     .then(res =>(
-    //         setEventsTest(res.data);
-    //         console.log(res.data);).
-    //     catch(err){{
-    //         console.log('Failed api/scheduler/calendars/'); 
-    //     }};
-    // }
+    const getEventsAsync = async (id) => {
+        try {
+            const res = await axios.get('api/scheduler/tasks/?calendar=' + id, { headers: headers });
+            await setEvents(res.data);
+        }
+        catch (err) {
+            console.log('Failed api/scheduler/tasks/?calendar=');
+        };
+    }
+    const mySetView = async (id) => {
+        view = id;
+        await getEventsAsync(id);
+    }
+    const getUserInfo = async ()=>{
+        try {
+            const res = await axios.get('api/account/user/',{headers: headers});
+            await PubSub.publish('userInfo',res.data);
+        }
+        catch (err) {
+            console.log('Failed  api/account/user/');
+        };
+    }
 
-    React.useEffect(() => {
-        const getCalendarsAsync = async ()=>{
-            try{
-                const res = await axios.get('api/scheduler/calendars/',{headers:headers})
-                await setCalendars(res.data);
-            }
-            catch(err){{
-                console.log('Failed  api/scheduler/calendars/'); 
-            }};
-        }
-        const getEventsAsync = async ()=>{
-            try{
-                const res = await axios.get('api/scheduler/calendars/tasks/?calendar=' + view,{headers:headers})
-                setEventsTest(res.data);
-                console.log(res.data);
-            }
-            catch(err){{
-                console.log('Failed api/scheduler/calendars/'); 
-            }};
-        }
+    useEffect(() => {
         getCalendarsAsync();
-        getEventsAsync();
+        getUserInfo();
     }, [])
+    const addTask = (event) => {
+        axios.post('api/scheduler/tasks/', {
+            'title': event['title'],
+            'description': '',
+            'calendar': view,
+            'start_time': event['start'],
+            'end_time': event['end']
+        },
+            {
+                headers: headers
+            }).then(res => {
+                getEventsAsync(view);
+            }).catch(err => {
+                console.log('Failed api/scheduler/calendars/');
+            });
+        console.log('create')
+    }
+
+    const delTask = (id) => {
+        const [taskId, calendarId] = id.split(' ');
+        axios.delete('api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId,
+            { headers: headers })
+            .then(res => {
+                getEventsAsync(view);
+            }).catch(err => {
+                console.log('Failed api/scheduler/tasks/{task_id}/?calendar={calendar_id}');
+            });
+    }
+
+    const editTask = (event) => {
+        const [taskId, calendarId] = event['event_id'].split(' ');
+        axios.put('api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId, {
+            'title': event['title'],
+            'description': '',
+            'calendar': calendarId,
+            'start_time': event['start'],
+            'end_time': event['end']
+        }, { headers: headers })
+            .then(res => {
+                getEventsAsync(view);
+            }).catch(err => {
+                console.log('Failed api/scheduler/tasks/{task_id}/?calendar={calendar_id}');
+            });
+    }
+    const dropTask = (droppedOn, updatedEvent) => {
+        const [taskId, calendarId] = updatedEvent['event_id'].split(' ');
+        axios.put('api/scheduler/tasks/' + taskId + '/?calendar=' + calendarId, {
+            'title': updatedEvent['title'],
+            'description': '',
+            'calendar': calendarId,
+            'start_time': droppedOn,
+            'end_time': updatedEvent['end']
+        }, { headers: headers })
+            .then(res => {
+                getEventsAsync(view);
+            }).catch(err => {
+                console.log('Failed api/scheduler/tasks/{task_id}/?calendar={calendar_id}');
+            });
+    }
+
+    const delCalendar = (id) => {
+        axios.delete('api/scheduler/calendars/' + id + '/',
+            { headers: headers })
+            .then(res => {
+                if (id == view) mySetView('all');
+                getCalendarsAsync();
+            }).catch(err => {
+                console.log('Failed /api/scheduler/calendars/{calendarId}');
+            });
+    }
 
     return (
         <>
-            {/* <Sidebar calendars = {calendars}/> */}
-            <Sidebar calendars = {calendars}/>
-            <Calendar events = {events}/>
-            <PopUp/>
+            <Sidebar calendars={calendars} mySetView={mySetView} />
+            <Calendar events={events} addTask={addTask} delTask={delTask} editTask={editTask} dropTask={dropTask}/>
+            <AddCalendar getCalendarsAsync={getCalendarsAsync}></AddCalendar>
+            <ChooseSlot addTask={addTask}></ChooseSlot>
+            <FindSlot ></FindSlot>
+            <DelCalendar delCalendar={delCalendar}></DelCalendar>
+            <JoinCalendar></JoinCalendar>
+            <EditCalendar getCalendarsAsync={getCalendarsAsync}></EditCalendar>
         </>
     );
 };
-
 export default HomePage;
