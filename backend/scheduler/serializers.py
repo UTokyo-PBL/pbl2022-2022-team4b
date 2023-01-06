@@ -21,9 +21,9 @@ class InviteCodeSerializer(serializers.ModelSerializer):
         data_dict = dict(data)
         
         rep = {
-            'invite_code': gen_share_code() if data_dict['invite_code'][0] == "new code" else data_dict['invite_code'][0],
+            'invite_code': gen_share_code() if data_dict['invite_code'] == "new code" else data_dict['invite_code'],
             'members': User.objects.filter(username__in=data_dict.get('members', [])),
-            'guests': [ i.id for i in User.objects.filter(username__in=data_dict.get('guests', []))],
+            'guests': User.objects.filter(username__in=data_dict.get('guests', [])),
         }
         return rep
 
@@ -50,7 +50,7 @@ class CalendarSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         data_dict = dict(data)
         rep = {
-            'owner': User.objects.get(username=data_dict.get('owner')[0]),
+            'owner': User.objects.get(username=data_dict.get('owner')),
             'title': data_dict.get('title', 'No Title'),
             'description': data_dict.get('description', ''),
             'members': User.objects.filter(username__in=data_dict.get('members', [])),

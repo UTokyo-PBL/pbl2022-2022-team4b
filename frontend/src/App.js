@@ -1,30 +1,32 @@
-
-import React, { Component } from 'react'
+import React, { Component, useState, setState } from 'react'
 import Sidebar from "./Components/Sidebar"
 import Calendar from "./Components/Calendar"
 import Box from '@mui/material/Box';
+import { Routes, Route, useRoutes } from 'react-router-dom';
+import routes from './routes'
 
-export default class App extends Component {
+function App() {
 
-  state = {calendarNames:["calendar1", "calendar2"], scheules:{}}
+  const routeTable = useRoutes(routes)
 
-  render() {
+  
 
-    const {calendarNames, scheules} = this.state
+  return (
 
-    return (
+    <div className="App">
+      <Box sx={{ display: 'flex' }}>
 
-      <div className="App">
-        <Box sx={{ display: 'flex' }}>
+        {/* <Sidebar calendarNames={calendarNames} />
 
-          <Sidebar calendarNames={calendarNames}/>
+        <Calendar scheules={scheules} /> */}
 
-          <Calendar scheules={scheules}/>
+        {routeTable}
 
 
-        </Box>
-      </div>
-    )
-  }
+      </Box>
+    </div>
+  )
+
 }
 
+export default App
