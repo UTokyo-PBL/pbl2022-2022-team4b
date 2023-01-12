@@ -46,7 +46,7 @@ export default function Settings() {
                 <Toolbar />
                 <Divider />
                 <List>
-                    {['account', 'groups'].map((text, index) => (
+                    {['account'].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton onClick={() => navigate(text)}>
                                 <ListItemIcon>

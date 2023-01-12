@@ -13,8 +13,11 @@ import JoinCalendar from '../Dialog/JoinCalendar/JoinCalendar';
 import ChooseSlot from '../Dialog/ChooseSlot/ChooseSlot';
 
 // A little bug,view在里面又问题
+
 var view = 'all';
 function HomePage(props) {
+
+
     const token = useLocation()['state']
     const headers = {
         'X-CSRFToken': Cookies.get('csrftoken'),
@@ -36,6 +39,7 @@ function HomePage(props) {
     const getCalendarsAsync = async () => {
         try {
             const res = await axios.get('http://34.146.199.221/api/scheduler/calendars/', { headers: headers });
+            console.log(res.data)
             setCalendars(res.data);
             mySetView('all');
         }
@@ -43,6 +47,8 @@ function HomePage(props) {
             console.log('Failed  api/scheduler/calendars/');
         };
     }
+
+
     const getEventsAsync = async (id) => {
         try {
             const res = await axios.get('http://34.146.199.221/api/scheduler/tasks/?calendar=' + id, { headers: headers });
@@ -144,6 +150,8 @@ function HomePage(props) {
                 console.log('Failed /api/scheduler/calendars/{calendarId}');
             });
     }
+
+    
 
     return (
         <>

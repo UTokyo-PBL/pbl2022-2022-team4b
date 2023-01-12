@@ -1,9 +1,11 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, Component} from 'react'
 import ja from 'date-fns/locale/ja'
 import PubSub from 'pubsub-js'
 import { styled } from '@mui/material/styles';
 import { Scheduler } from "@aldabil/react-scheduler";
 import Toolbar from '@mui/material/Toolbar';
+
+
 
 const drawerWidth = 240;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -30,6 +32,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 function Calendar(props) {
     const [drawerOpen, setDrawerOpen] = useState(false);
+
     const colors = ['CornflowerBlue','Coral','LightCoral','HotPink','Thistle','Grey','MediumAquaMarine','DarkOrange'];
     const transEvents = (events) =>{
         if(events.length !== 0){
@@ -58,6 +61,7 @@ function Calendar(props) {
         props.delTask(deletedId);
     };
 
+
     const handleConfirm = (event,action)=>{
         if(action === 'create'){
             props.addTask(event);
@@ -66,6 +70,8 @@ function Calendar(props) {
         else{
             props.editTask(event);
         }
+
+       
         return event;
     };
 

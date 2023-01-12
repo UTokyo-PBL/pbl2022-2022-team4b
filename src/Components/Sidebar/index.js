@@ -104,7 +104,7 @@ function Sidebar(props) {
 
                 <Divider />
                 <List>
-                    {['Notes'].map((text) => (
+                    {['Settings'].map((text) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton onClick={() => navigate('/settings/account', {
                                 state: token

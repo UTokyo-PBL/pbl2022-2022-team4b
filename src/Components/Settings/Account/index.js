@@ -13,7 +13,7 @@ import FormControl from '@mui/material/FormControl';
 export default function Account() {
 
     const [userInfo, setUserInfo] = useState({})
-    const [isChanging, setIsChanging] = useState({ 'name': false, 'email:': false, 'password':false })
+    const [isChanging, setIsChanging] = useState({ 'name': false, 'email:': false, 'password': false })
 
     const token = useLocation()['state']
 
@@ -36,15 +36,19 @@ export default function Account() {
     }
 
 
+    const inputRefs = { 'name': React.createRef(), 'email': React.createRef(), 'password': React.createRef() }
+
     useEffect(() => {
         getUserInfo();
     }, [])
 
     const changeInfo = (infoType) => {
-        setIsChanging({ ...isChanging, [infoType]: !isChanging[infoType] })
-        if (isChanging(infoType)) {
-            //post 
+        if (isChanging[infoType]) {
+            console.log(inputRefs[infoType])
+            setUserInfo({...userInfo, [infoType] : inputRefs[infoType].current.value})
         }
+        setIsChanging({ ...isChanging, [infoType]: !isChanging[infoType] })
+
     }
 
     return (
@@ -66,7 +70,7 @@ export default function Account() {
 
                     {isChanging['name'] ?
                         <FormControl sx={{ width: '25ch' }}>
-                            <OutlinedInput sx={{ height: '5ch' }} placeholder={userInfo['name']} />
+                            <OutlinedInput inputRef={inputRefs['name']} sx={{ height: '5ch' }} placeholder={userInfo['name']} />
                         </FormControl> : userInfo['name']}
 
 
@@ -89,7 +93,7 @@ export default function Account() {
 
                     {isChanging['email'] ?
                         <FormControl sx={{ width: '25ch' }}>
-                            <OutlinedInput sx={{ height: '5ch' }} placeholder={userInfo['email']} />
+                            <OutlinedInput inputRef={inputRefs['email']} sx={{ height: '5ch' }} placeholder={userInfo['email']} />
                         </FormControl> : userInfo['email']}
 
                 </Typography>
@@ -101,7 +105,7 @@ export default function Account() {
             <br />
             <Divider />
             <br />
-            
+
             <Typography variant="h7" fontWeight='bold'>
                 Password<br /><br />
             </Typography>
@@ -110,7 +114,7 @@ export default function Account() {
 
                     {isChanging['password'] ?
                         <FormControl sx={{ width: '25ch' }}>
-                            <OutlinedInput sx={{ height: '5ch' }} />
+                            <OutlinedInput inputRef={inputRefs['password']} sx={{ height: '5ch' }} />
                         </FormControl> : '**********'}
 
                 </Typography>
@@ -118,7 +122,7 @@ export default function Account() {
                     {isChanging['password'] ? 'save' : 'change'}
                 </Button>
             </Grid>
-           
+
 
         </Box>
 
