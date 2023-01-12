@@ -17,9 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from accounts.urls import urlpatterns as accounts_urls
 from scheduler.urls import urlpatterns as scheduler_urls
-
+from scheduler import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/scheduler/', include(scheduler_urls)),
     path('api/account/', include(accounts_urls)),
+    path('login/', views.Login),
+    path('login', views.Login),
+    path('main', views.HomePage),
+    path('register', views.Register),
+    path('settings', views.Settings),
+    path('', views.index)
 ]

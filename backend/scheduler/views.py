@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 import datetime
 from rest_framework import viewsets, permissions, mixins, generics
@@ -14,6 +14,23 @@ from .find_free_slot import allocate_free_slot
 
 # Create your views here.
 # Need to complete all the functions here to handle the requests
+
+def index(request):
+    return redirect("/login")
+
+def HomePage(request):
+    return render(request,"index.html")
+    
+def Login(request):
+    return render(request,"index.html")
+    
+def Register(request):
+    return render(request,"index.html")
+    
+def Settings(request):
+    return render(request,"index.html")
+
+
 class CalendarAPI(viewsets.ModelViewSet):
     # queryset = Calendar.objects.all()
     permission_classes = [permissions.IsAuthenticated, ]
